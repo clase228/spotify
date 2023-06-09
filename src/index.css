@@ -69,6 +69,11 @@
    color: #AD61FF;
    cursor: pointer;
  }
+ ._btn-text.active {
+   border-color: #AD61FF;
+   color: #AD61FF;
+   cursor: pointer;
+ }
  
  ._btn-icon:active svg {
    fill: transparent;
@@ -138,6 +143,8 @@
    -webkit-box-pack: justify;
        -ms-flex-pack: justify;
            justify-content: space-between;
+   position: relative;
+   transition: all 0.4s ease-in-out;
  }
  
  .nav__menu {
@@ -366,6 +373,8 @@
  }
  
  .playlist__item {
+   overflow: hidden;
+   position: relative;
    width: 100%;
    display: block;
    margin-bottom: 12px;
@@ -865,3 +874,60 @@
    width: 109px;
  }
  
+
+ .dropdown{
+   position: relative;
+ }
+ .dropdown__wrapper{
+   display: none;
+   top: 48px;
+   position: absolute;
+   width: 248px;
+   height: 305px;
+   background: #313131;
+   border-radius: 12px;
+   padding: 34px;
+ }
+ .dropdown__wrapper.active{
+   display: block;
+ }
+ .dropdown__menu{
+   height: 100%;
+   overflow-y:auto; 
+ }
+ .dropdown__list{
+   margin-bottom: 26px;
+   cursor: pointer;
+
+ }
+
+ .dropdown__menu::-webkit-scrollbar {
+   width: 4px;
+}
+.dropdown__menu::-webkit-scrollbar-track {
+   background: #4B4949;
+}
+.dropdown__menu::-webkit-scrollbar-thumb{
+   background: #FFFFFF;
+border-radius: 10px;
+}
+
+.nameId__load{
+   width: 356px;
+height: 19px;
+
+background: #313131;
+}
+.author__load{
+   width: 271px;
+height: 19px;
+
+background: #313131;
+}
+.album__load{
+   position: absolute;
+width: 305px;
+height: 19px;
+top: 16px;
+background: #313131;
+}

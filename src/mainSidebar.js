@@ -9,7 +9,7 @@ function SidebarItem(props) {
            </a>
        </div>
 )}
-function mainSidebar() {
+function MainSidebar() {
    return (
       <div className="main__sidebar sidebar">
       <div className="sidebar__personal">
@@ -27,4 +27,4 @@ function mainSidebar() {
    );
  }
  
- export default mainSidebar;
+ export default MainSidebar;

@@ -1,7 +1,7 @@
-import mainNav from './mainNav';
-import mainCenterblock from './mainCenterblock';
-import mainSidebar from './mainSidebar';
-import bar from './bar';
+import MainNav from './mainNav';
+import MainCenterblock from './mainCenterblock';
+import MainSidebar from './mainSidebar';
+import Bar from './bar';
 import './App.css';
 
 function App() {
@@ -9,15 +9,14 @@ function App() {
     <div className="wrapper">
       <div className='container'>
          <div className='main'>
-            {mainNav()}
-            {mainCenterblock()}
-            {mainSidebar()}
-            {bar()}
+            <MainNav />
+            <MainCenterblock />
+            <MainSidebar />
+            <Bar />
          </div>
       </div>
     </div>
   );
 }
-console.log(mainNav);
 
 export default App;

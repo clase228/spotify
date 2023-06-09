@@ -16,7 +16,7 @@ function LikeDis(props){
    </div>
  )}
 
-function bar(){
+function Bar(){
  return (
    <div className="bar">
                 <div className="bar__content">
@@ -71,4 +71,4 @@ function bar(){
             </div>
  )
 }
-export default bar
+export default Bar
