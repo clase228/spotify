@@ -1,15 +1,16 @@
+import Skeleton from 'react-loading-skeleton';
 import playlist01 from "./img/playlist01.png"
 import playlist02 from "./img/playlist02.png"
 import playlist03 from "./img/playlist03.png"
-function SidebarItem(props) {
-   return (
-      <div className="sidebar__item">
-           <a className="sidebar__link" href={props.href}>
-               <img className="sidebar__img" src={props.src} alt="day's playlist" />
-           </a>
-       </div>
-)}
-function MainSidebar() {
+function MainSidebar(props) {
+   function SidebarItem(prop) {
+      return (
+         <div className="sidebar__item">
+              <a className="sidebar__link" href={prop.href}>
+              {props.loading ? (<Skeleton className='img_load'/>) : <img className="sidebar__img" src={prop.src} alt="day's playlist" /> }
+              </a>
+          </div>
+   )}
    return (
       <div className="main__sidebar sidebar">
       <div className="sidebar__personal">

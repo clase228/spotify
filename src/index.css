@@ -304,11 +304,9 @@
    border: 1px solid #FFFFFF;
    border-radius: 60px;
    padding: 6px 20px;
- }
- 
- .filter__button:not(:last-child) {
    margin-right: 10px;
  }
+ 
  
  .content__title {
    display: -webkit-box;
@@ -879,7 +877,6 @@
    position: relative;
  }
  .dropdown__wrapper{
-   display: none;
    top: 48px;
    position: absolute;
    width: 248px;
@@ -887,6 +884,7 @@
    background: #313131;
    border-radius: 12px;
    padding: 34px;
+   z-index: 1000;
  }
  .dropdown__wrapper.active{
    display: block;
@@ -913,12 +911,18 @@ border-radius: 10px;
 }
 
 .nameId__load{
+   position: absolute;
+       transform: translate(0,-50%);
+    top: 50%;
    width: 356px;
 height: 19px;
 
 background: #313131;
 }
 .author__load{
+   position: absolute;
+       transform: translate(0,-50%);
+    top: 50%;
    width: 271px;
 height: 19px;
 
@@ -926,8 +930,22 @@ background: #313131;
 }
 .album__load{
    position: absolute;
-width: 305px;
-height: 19px;
-top: 16px;
+       transform: translate(0,-50%);
+    top: 50%;
+   width: 305px;
+   height: 19px;
+   background: #313131;
+}
+.nameid_t__load{
+   position: absolute;
+   width: 59px;
+   height: 19px;
+   background: #313131;
+}
+.img_load{
+   position: absolute;
+width: 250px;
+height: 150px;
+
 background: #313131;
 }

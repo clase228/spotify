@@ -1,3 +1,5 @@
+
+import Skeleton from 'react-loading-skeleton';
 import iconSprite from "./img/icon/sprite.svg";
 function PlayerBtn(props){
  return (
@@ -16,7 +18,7 @@ function LikeDis(props){
    </div>
  )}
 
-function Bar(){
+function Bar(props){
  return (
    <div className="bar">
                 <div className="bar__content">
@@ -35,14 +37,14 @@ function Bar(){
                                 <div className="track-play__contain">
                                     <div className="track-play__image">
                                         <svg className="track-play__svg" alt="music">
-                                            <use href={iconSprite + '#icon-note'} ></use>
+                                            <use href={props.loading ? (<Skeleton  />) : (iconSprite + '#icon-note')}  ></use>
                                         </svg>
                                     </div>
                                     <div className="track-play__author">
-                                        <a className="track-play__author-link" href="http://">Ты та...</a>
+                                        <a className="track-play__author-link" href="http://">  {props.loading ? (<Skeleton className='nameid_t__load' />) : ('Ты та...')}</a>
                                     </div>
                                     <div className="track-play__album">
-                                        <a className="track-play__album-link" href="http://">Баста</a>
+                                        <a className="track-play__album-link" href="http://">{props.loading ? (<Skeleton className='nameid_t__load' />) : ('Баста')}</a>
                                     </div>
                                 </div>
 
