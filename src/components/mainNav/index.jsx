@@ -13,8 +13,7 @@ function MainNav() {
    const toggleVisibility = () => {
       setVisible(!visible)
    };
-
-
+   
 
    return (
       <S.MainNav >

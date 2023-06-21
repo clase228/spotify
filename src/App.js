@@ -1,9 +1,8 @@
-import { useEffect,useState } from 'react';
-import MainNav from './components/mainNav';
-import MainCenterblock from './components/mainCenterblock';
-import MainSidebar from './components/mainSidebar';
-import Bar from './components/bar';
+
+
 import './App.css';
+import { useState } from 'react';
+import { AppRoutes } from './routes';
 import styled,{createGlobalStyle} from 'styled-components';
 const GlobalStyle =createGlobalStyle `
 * {
@@ -43,48 +42,26 @@ const GlobalStyle =createGlobalStyle `
    color: #FFFFFF;
  }
 `
-const MainBlock = styled.div`
-   flex: 1 1 auto;
-   display: flex;
-   flex-wrap: wrap;
-   justify-content: space-between;
- }`
+
 const Wrapper = styled.div`
    width: 100%;
    min-height: 100%;
    overflow: hidden;
    background-color: #383838;
  }`
-const Container = styled.div`
-   max-width: 1920px;
-   height: 100vh;
-   margin: 0 auto;
-   position: relative;
-   background-color: #181818;
- }`
+
 function App() {
-   const [loading, setLoading] = useState(true);
+  
+   const [user, setUser] = useState(null);
 
-useEffect(() => {
-      // эмуляция загрузки данных
-      setTimeout(() => {
-         console.log(1);
-        setLoading(false);
-      }, 5000);
-   }, []);
-
+  const handleLogin = () => setUser({ login: "taradam" });
+  const handleLogout = () => setUser(null);
 
   return (
+   
      <Wrapper className="wrapper">
       <GlobalStyle/>
-      <Container >
-         <MainBlock >
-            <MainNav />
-            <MainCenterblock loading={loading}/>
-            <MainSidebar loading={loading}/>
-            <Bar loading={loading}/>
-         </MainBlock>
-      </Container>
+         <AppRoutes user={user} onAuthButtonClick={user ? handleLogout : handleLogin}  />
     </Wrapper>
   );
   
