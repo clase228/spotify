@@ -1,7 +1,15 @@
 import iconSprite from "../../img/icon/sprite.svg";
 import  { useState } from 'react';
+import { useParams } from "react-router-dom";
 import * as S from './styles'
+import {Playlist} from '../../constants'
+import {nameOfPlaylist} from '../../constants'
  function MainCenterblock(props) {
+   const params = useParams()
+   const playlist = Playlist.filter((item) => item.playlist === params.id);   
+   const namePlaylist = nameOfPlaylist.filter((item) => item.playlist === params.id);
+   console.log(namePlaylist.length);
+
    function PlaylistItem (prop){
       return (
          <S.PlaylistItem >
@@ -68,7 +76,7 @@ function Dropdown(props) {
                         </S.SearchSvg>
                         <S.SearchText type="search" placeholder="Поиск" name="search" />
                     </S.CenterblockSearch>
-                    <S.CenterblockH2 >Треки</S.CenterblockH2>
+                    <S.CenterblockH2 >{namePlaylist.length === 0 ? 'Треки' : namePlaylist[0].name}</S.CenterblockH2>
                     <S.CenterblockFilter  >
                         <S.FilterTitle >Искать по:</S.FilterTitle>
                         <Dropdown id="nameid" name="Исполнителю" content={['Michael Jackson', 'Frank Sinatra', 'Calvin Harris', 'Arctic Monkeys', 'Zhu', 'Michael Jackson', 'Frank Sinatra', 'Calvin Harris', 'Arctic Monkeys', 'Zhu', 'Michael Jackson', 'Frank Sinatra', 'Calvin Harris', 'Arctic Monkeys', 'Zhu']}/>
@@ -93,17 +101,9 @@ function Dropdown(props) {
    
  
                         <S.ContentPlaylist >
-                        <PlaylistItem nameid=" Guilt" author="Nero" album="Welcome Reality" time="4:44" />
-                        <PlaylistItem nameid=" Elektro" author="Dynoro, Outwork, Mr. Gee" album="Elektro" time="2:22" />
-                        <PlaylistItem nameid=" I’m Fire" author="Ali Bakgor" album="I’m Fire" time="2:22" />
-                        <PlaylistItem nameid=" Non Stop" author="Стоункат, Psychopath" album="Non Stop" time="4:12" title="(Remix)" />
-                        <PlaylistItem nameid=" Run Run" author="Jaded, Will Clarke, AR/CO" album="Run Run" time="2:54" title="(feat. AR/CO)" />
-                        <PlaylistItem nameid=" Eyes on Fire" author="Blue Foundation, Zeds Dead" album="Eyes on Fire" time="5:20" title="(Zeds Dead Remix)" />
-                        <PlaylistItem nameid=" Mucho Bien" author="HYBIT, Mr. Black, Offer Nissim, Hi Profile" album="Mucho Bien" time="3:41" title="(Hi Profile Remix)" />
-                        <PlaylistItem nameid=" Knives n Cherries" author="minthaze" album="Captivating" time="1:48" title="" />
-                        <PlaylistItem nameid=" How Deep Is Your Love" author="Calvin Harris, Disciples" album="How Deep Is Your Love" time="3:32" title="" />
-                        <PlaylistItem nameid=" Morena" author="Tom Boxer" album="Soundz Made in Romania" time="3:36" title="" />
-                        <PlaylistItem nameid=" " author="" album="" time="" title="" />
+                           {playlist.map((el, index) => (
+                              <PlaylistItem nameid={el.nameid} author={el.author} album={el.album} time={el.time} />
+                           ))}
                         </S.ContentPlaylist>                        
                     </S.CenterblockContent>
                 </S.MainCenterblock>

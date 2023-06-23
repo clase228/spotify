@@ -1,10 +1,11 @@
 import  { useState } from 'react';
 import * as S from './styles'
+import {Link} from 'react-router-dom';
 
 import logo from "../../img/logo.png"
 function MenuItem(props) {
    return (
-      <S.MenuItem className="menu__item"><S.MenuLink href={props.href}>{props.link}</S.MenuLink></S.MenuItem>
+      <S.MenuItem><Link to={props.href}>{props.link}</Link></S.MenuItem>
 )}
 
 function MainNav() {
@@ -28,9 +29,9 @@ function MainNav() {
       {visible && (
          <S.NavMenu >
              <S.MenuList className="menu__list">
-               <MenuItem href="http://" link="Главное" />
-               <MenuItem href="http://" link="Мой плейлист" />
-               <MenuItem href="http://" link="Войти" />
+               <MenuItem href="/main/main" link="Главное" />
+               <MenuItem href="/main/my" link="Мой плейлист" />
+               <MenuItem href="/main/" link="Войти" />
              </S.MenuList>
          </S.NavMenu>
       )}
