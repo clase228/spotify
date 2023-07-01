@@ -14,7 +14,16 @@ export const BarPlayerProgress = styled.div`
 width: 100%;
 height: 5px;
 background: #2e2e2e;
+position: relative;
 `
+export const BarPlayerProgressBar = styled.div`
+  position:absolute;
+  left: 0;
+  top: 0;
+  background-color: white;
+  height:100%
+  `;
+
 export const BarPlayerBlock = styled.div`
 height: 73px;
 display: flex;
@@ -197,6 +206,9 @@ width: 59px;
 height: 19px;
 background: #313131;
 `
+export const HiddenAudio = styled.audio`
+  display:none;
+`;
 
 
 

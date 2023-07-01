@@ -13,8 +13,8 @@ export const AppRoutes = ({ user }) => {
       <Route path="/register" element={<Register />} />
 
       <Route element={<ProtectedRoute isAllowed={Boolean(login)} />}>
- 
          <Route path="/main/:id" element={<Main />} />
+ 
       </Route>
 
       <Route path="*" element={<NotFound />} />

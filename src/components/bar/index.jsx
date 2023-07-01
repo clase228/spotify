@@ -1,12 +1,37 @@
 
 import iconSprite from "../../img/icon/sprite.svg";
 import * as S from './styles'
+import { useState, useRef } from "react";
+import audio from '../../audio/Bobby_Marleni_-_Dropin.mp3'
 
 function Bar(props){
+   const [isPlay,setPlay] = useState(false)
+   const audioRef = useRef(null)
+   const currentTimeAudio = useRef(null)
+   let currentTimeInterval;
+   clearInterval(currentTimeInterval)
+   const handelOnOffTrack = () =>{
+      if(isPlay === false){
+         setPlay(true)
+         audioRef.current.play()
+         currentTimeInterval = setInterval(() => {
+            currentTimeAudio.current.style.width = audioRef.current.currentTime / audioRef.current.duration * 100 + '%'
+         }, 1);
+      }else{
+         clearInterval(currentTimeInterval)
+         setPlay(false)
+         audioRef.current.pause()
+      }
+   }
+   
+  
+   
  return (
    <S.Bar >
                 <S.BarContent >
-                    <S.BarPlayerProgress ></S.BarPlayerProgress>
+                    <S.BarPlayerProgress >
+                        <S.BarPlayerProgressBar ref={currentTimeAudio}/>
+                    </S.BarPlayerProgress>
                     <S.BarPlayerBlock >
                         <S.BarPlayer >
                             <S.PlayerControls className="player__controls">
@@ -16,8 +41,8 @@ function Bar(props){
                                 </S.PlayerBtnPrevSvg>
                             </S.PlayerBtnPrev>
                             <S.PlayerBtnPlay>
-                                <S.PlayerBtnPlaySvg alt='play'>
-                                    <use href={iconSprite + '#icon-play'} ></use>
+                                <S.PlayerBtnPlaySvg alt={isPlay ? 'pause' : 'play'} onClick={handelOnOffTrack}>
+                                    <use href={iconSprite + (isPlay ? '#icon-pause' : '#icon-play')} ></use>
                                 </S.PlayerBtnPlaySvg>
                             </S.PlayerBtnPlay>
                             <S.PlayerBtnNext>
@@ -81,6 +106,9 @@ function Bar(props){
                         </S.BarVolume>
                     </S.BarPlayerBlock>
                 </S.BarContent>
+                <S.HiddenAudio controls ref={audioRef} >
+                  <source  src={audio}  type="audio/mpeg" />
+                </S.HiddenAudio>
             </S.Bar>
  )
 }

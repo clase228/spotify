@@ -31,7 +31,7 @@ function MainNav() {
              <S.MenuList className="menu__list">
                <MenuItem href="/main/main" link="Главное" />
                <MenuItem href="/main/my" link="Мой плейлист" />
-               <MenuItem href="/main/" link="Войти" />
+               <MenuItem href="/" onClick={localStorage.setItem('login', '')} link="Выйти" />
              </S.MenuList>
          </S.NavMenu>
       )}
