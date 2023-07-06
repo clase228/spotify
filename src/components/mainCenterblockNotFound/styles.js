@@ -55,7 +55,7 @@ export const SearchText = styled.input`
   color: #ffffff;
   &::-webkit-input-placeholder {
     background-color: transparent;
-    color: #ffffff;
+    color: ${props=> props.color};
     font-style: normal;
     font-weight: 400;
     font-size: 16px;
@@ -63,7 +63,7 @@ export const SearchText = styled.input`
   }
   &:-ms-input-placeholder {
     background-color: transparent;
-    color: #ffffff;
+    color: ${props=> props.color};
     font-style: normal;
     font-weight: 400;
     font-size: 16px;
@@ -71,7 +71,7 @@ export const SearchText = styled.input`
   }
   &::-ms-input-placeholder {
     background-color: transparent;
-    color: #ffffff;
+    color: ${props=> props.color};
     font-style: normal;
     font-weight: 400;
     font-size: 16px;
@@ -79,7 +79,7 @@ export const SearchText = styled.input`
   }
   &::placeholder {
     background-color: transparent;
-    color: #ffffff;
+    color: ${props=> props.color};
     font-style: normal;
     font-weight: 400;
     font-size: 16px;

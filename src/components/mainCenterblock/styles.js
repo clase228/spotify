@@ -53,7 +53,7 @@ export const SearchText = styled.input`
   color: #ffffff;
   &::-webkit-input-placeholder {
     background-color: transparent;
-    color: #ffffff;
+    color: ${props => props.color };
     font-style: normal;
     font-weight: 400;
     font-size: 16px;
@@ -61,7 +61,7 @@ export const SearchText = styled.input`
   }
   &:-ms-input-placeholder {
     background-color: transparent;
-    color: #ffffff;
+    color: ${props => props.color};
     font-style: normal;
     font-weight: 400;
     font-size: 16px;
@@ -69,7 +69,7 @@ export const SearchText = styled.input`
   }
   &::-ms-input-placeholder {
     background-color: transparent;
-    color: #ffffff;
+    color: ${props => props.color};
     font-style: normal;
     font-weight: 400;
     font-size: 16px;
@@ -77,7 +77,7 @@ export const SearchText = styled.input`
   }
   &::placeholder {
     background-color: transparent;
-    color: #ffffff;
+    color: ${props => props.color};
     font-style: normal;
     font-weight: 400;
     font-size: 16px;
@@ -162,11 +162,8 @@ export const TrackTitleImage = styled.div`
   height: 51px;
   padding: 16px;
   background: #313131;
-
   display: flex;
-
   align-items: center;
-
   justify-content: center;
   margin-right: 17px;
 `;
@@ -250,10 +247,10 @@ export const DropdownMenu = styled.div`
     width: 4px;
   }
   &::-webkit-scrollbar-track {
-    background: #4b4949;
+    background: ${props => props.scrollbar} ;
   }
   &::-webkit-scrollbar-thumb {
-    background: #ffffff;
+    background: ${props => props.scrollbarInner};
     border-radius: 10px;
   }
 `;
@@ -262,7 +259,6 @@ export const DropdownList = styled.div`
   cursor: pointer;
   &.active {
     text-decoration-line: underline;
-    font-feature-settings: "pnum" on, "lnum" on;
     color: #b672ff;
   }
 `;
@@ -289,7 +285,7 @@ export const FilterButton = styled(_btnText)`
   font-weight: 400;
   font-size: 16px;
   line-height: 24px;
-  border: 1px solid #ffffff;
+  border: 1px solid;
   border-radius: 60px;
   padding: 6px 20px;
   margin-right: 10px;

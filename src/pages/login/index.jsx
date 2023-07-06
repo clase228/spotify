@@ -8,7 +8,6 @@ export const Login = ({user,onAuthButtonClick }) => {
    const navigate = useNavigate();
    const setUser = () =>{
       localStorage.setItem('login', login);
-      console.log(localStorage.getItem('login'));
       navigate("/main/1", { replace: false });
 
       

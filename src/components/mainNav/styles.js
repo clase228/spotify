@@ -1,8 +1,11 @@
 import styled from "styled-components";
+const bgColorFrorLight = '#fff';
+const colorFrorLight = '#fff';
+const bgColorFrorDark = '#fff';
+const colorFrorDark = '#000';
 
 export const MainNav = styled.nav`
   width: 244px;
-  background-color: #181818;
   padding: 20px 0 20px 36px;
 `;
 export const NavLogo = styled.div`
@@ -44,7 +47,6 @@ export const MenuItem = styled.li`
   padding: 5px 0;
   margin-bottom: 16px;
   & a{
-   color: #ffffff;
    font-weight: 400;
    font-size: 16px;
    line-height: 24px;
@@ -53,3 +55,11 @@ export const MenuItem = styled.li`
 export const MenuLink = styled.a`
 
 `;
+export const SwitchTheme = styled.svg`
+  width:39px;
+  height:39px;
+  border:1px solid #000;
+  border-radius:100%;
+  fill: transparent;
+`;
+

@@ -10,7 +10,6 @@ export const Main = () => {
   useEffect(() => {
     // эмуляция загрузки данных
     setTimeout(() => {
-      console.log(1);
       setLoading(false);
     }, 5000);
   }, []);
@@ -19,9 +18,9 @@ export const Main = () => {
    <S.Container >
     <S.MainBlock>
       <MainNav />
-      <MainCenterblock loading={loading} />
-      <MainSidebar loading={loading} />
-      <Bar loading={loading} />
+      <MainCenterblock loading={loading}   />
+      <MainSidebar loading={loading}   />
+      <Bar loading={loading}   />
     </S.MainBlock>
    </S.Container>
       

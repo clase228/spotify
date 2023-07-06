@@ -10,7 +10,6 @@ export const NotFound = () => {
   useEffect(() => {
     // эмуляция загрузки данных
     setTimeout(() => {
-      console.log(1);
       setLoading(false);
     }, 5000);
   }, []);

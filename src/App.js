@@ -1,9 +1,10 @@
 
 
 import './App.css';
-import { useState } from 'react';
+import React,{ useState, useContext} from 'react';
 import { AppRoutes } from './routes';
 import styled,{createGlobalStyle} from 'styled-components';
+import {ThemeContext,themes} from './context/theme'
 const GlobalStyle =createGlobalStyle `
 * {
    margin: 0;
@@ -49,24 +50,27 @@ const Wrapper = styled.div`
    overflow: hidden;
    background-color: #383838;
  }`
-
-function App() {
-  
-   const [user, setUser] = useState(null);
-
-  const handleLogin = () => setUser({ login: "taradam" });
-  const handleLogout = () => setUser(null);
-
-  return (
+ function App() {
    
+   const [currentTheme, setCurrentTheme] = useState(themes.light);
+
+   const toggleTheme = () => {
+     if (currentTheme === themes.dark) {
+       setCurrentTheme(themes.light);
+       return;
+     }
+ 
+     setCurrentTheme(themes.dark);
+   };
+  
+  return (  
      <Wrapper className="wrapper">
       <GlobalStyle/>
-         <AppRoutes user={user} onAuthButtonClick={user ? handleLogout : handleLogin}  />
+      <ThemeContext.Provider value={{ theme: currentTheme, toggleTheme }}>
+         <AppRoutes  />
+      </ThemeContext.Provider>
     </Wrapper>
   );
-  
 }
 
 export default App;
-
-//Здравствуйте, вот у вас в примере было показано что вы передавали функцию и Переменную User В NavBar(При авторизации) А у нас нету страницы такой как реализовать это на прямую ?

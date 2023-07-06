@@ -3,6 +3,7 @@ import iconSprite from "../../img/icon/sprite.svg";
 import * as S from './styles'
 import { useState, useRef } from "react";
 import audio from '../../audio/Bobby_Marleni_-_Dropin.mp3'
+import { useThemeContext } from "../../context/theme";
 
 function Bar(props){
    const [isPlay,setPlay] = useState(false)
@@ -25,39 +26,39 @@ function Bar(props){
    }
    
   
-   
+   const {theme} = useThemeContext()
  return (
-   <S.Bar >
+   <S.Bar style={{background: theme.background}}>
                 <S.BarContent >
-                    <S.BarPlayerProgress >
-                        <S.BarPlayerProgressBar ref={currentTimeAudio}/>
+                    <S.BarPlayerProgress style={{background: theme.progresBarElement}}>
+                        <S.BarPlayerProgressBar style={{background: theme.progresBar}} ref={currentTimeAudio}/>
                     </S.BarPlayerProgress>
                     <S.BarPlayerBlock >
                         <S.BarPlayer >
                             <S.PlayerControls className="player__controls">
                             <S.PlayerBtnPrev>
                                 <S.PlayerBtnPrevSvg alt='prev'>
-                                    <use href={iconSprite + '#icon-prev'} ></use>
+                                    <use href={theme.color === '#fff' ? iconSprite + '#icon-prev-dark'  :iconSprite + '#icon-prev-light'} ></use>
                                 </S.PlayerBtnPrevSvg>
                             </S.PlayerBtnPrev>
                             <S.PlayerBtnPlay>
                                 <S.PlayerBtnPlaySvg alt={isPlay ? 'pause' : 'play'} onClick={handelOnOffTrack}>
-                                    <use href={iconSprite + (isPlay ? '#icon-pause' : '#icon-play')} ></use>
+                                    <use href={(isPlay ? theme.color === '#fff' ? iconSprite + '#icon-pause-dark'  :iconSprite + '#icon-pause-light': theme.color === '#fff' ? iconSprite + '#icon-play-dark'  :iconSprite + '#icon-play-light')} ></use>
                                 </S.PlayerBtnPlaySvg>
                             </S.PlayerBtnPlay>
                             <S.PlayerBtnNext>
                                 <S.PlayerBtnNextSvg alt='next'>
-                                    <use href={iconSprite + '#icon-next'} ></use>
+                                    <use href={theme.color === '#fff' ? iconSprite + '#icon-next-dark'  :iconSprite + '#icon-next-light'} ></use>
                                 </S.PlayerBtnNextSvg>
                             </S.PlayerBtnNext>
                             <S.PlayerBtnRepeat>
                                 <S.PlayerBtnRepeatSvg alt='repeat'>
-                                    <use href={iconSprite + '#icon-repeat'} ></use>
+                                    <use href={theme.color === '#fff' ? iconSprite + '#icon-repeat-dark'  :iconSprite + '#icon-repeat-light'} ></use>
                                 </S.PlayerBtnRepeatSvg>
                             </S.PlayerBtnRepeat>
                             <S.PlayerBtnShuffle>
                                 <S.PlayerBtnShuffleSvg alt='shuffle'>
-                                    <use href={iconSprite + '#icon-shuffle'} ></use>
+                                    <use href={theme.color === '#fff' ? iconSprite + '#icon-shuffle-dark'  :iconSprite + '#icon-shuffle-light'} ></use>
                                 </S.PlayerBtnShuffleSvg>
                             </S.PlayerBtnShuffle>
                             </S.PlayerControls>
@@ -70,10 +71,10 @@ function Bar(props){
                                         </S.TrackPlaySvg>
                                     </S.TrackPlayImage>
                                     <S.TrackPlayAuthor >
-                                        <S.TrackPlayAuthorLink  href="http://">  {props.loading ? (<S.NameidBarLoad  />) : ('Ты та...')}</S.TrackPlayAuthorLink>
+                                        <S.TrackPlayAuthorLink style={{color:theme.color}}  href="http://">  {props.loading ? (<S.NameidBarLoad  />) : ('Ты та...')}</S.TrackPlayAuthorLink>
                                     </S.TrackPlayAuthor>
                                     <S.TrackPlayAlbum >
-                                        <S.TrackPlayAlbumLink  href="http://">{props.loading ? (<S.NameidBarLoad  />) : ('Баста')}</S.TrackPlayAlbumLink>
+                                        <S.TrackPlayAlbumLink style={{color:theme.color}}  href="http://">{props.loading ? (<S.NameidBarLoad  />) : ('Баста')}</S.TrackPlayAlbumLink>
                                     </S.TrackPlayAlbum>
                                 </S.TrackPlayContain>
 
@@ -95,7 +96,7 @@ function Bar(props){
                            <S.VolumeContent className="volume__content">
                                 <S.VolumeImage className="volume__image">
                                     <S.VolumeSvg alt="volume">
-                                        <use href={iconSprite + '#icon-volume'} ></use>
+                                        <use href={theme.color === '#fff' ? iconSprite + '#icon-volume-dark'  :iconSprite + '#icon-volume-light' } ></use>
                                     </S.VolumeSvg>
                                 </S.VolumeImage>
                                 <S.VolumeProgress className=" _btn">
