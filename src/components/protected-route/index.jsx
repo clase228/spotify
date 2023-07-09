@@ -1,6 +1,7 @@
 import { Navigate,Outlet } from "react-router-dom";
 
-export const ProtectedRoute = ({ redirectPath = "/", isAllowed }) => {
+export const ProtectedRoute = ({ redirectPath = "/" }) => {
+   const isAllowed = localStorage.getItem("login")
   if (!isAllowed) {
     return <Navigate to={redirectPath} replace={true} />;
   }

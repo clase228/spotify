@@ -35,7 +35,7 @@ function MenuItem(props) {
              <S.MenuList className="menu__list">
                <MenuItem theme={theme} href="/main/main" link="Главное" />
                <MenuItem theme={theme} href="/main/my" link="Мой плейлист" />
-               <MenuItem theme={theme} href="/" onClick={localStorage.setItem('login', '')} link="Выйти" />
+               <MenuItem theme={theme} href="/" onClick={() => localStorage.setItem('login', '')} link="Выйти" />
                <S.MenuItem onClick={toggleTheme}  >
                   <S.SwitchTheme style={{borderColor: theme.color ,stroke: theme.color}}>
                      <use href={theme.color === '#fff' ? iconSprite + '#icon-turn-night' : iconSprite + '#icon-turn-light'}></use>
