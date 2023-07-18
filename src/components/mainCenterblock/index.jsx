@@ -5,13 +5,30 @@ import * as S from './styles'
 import {Playlist} from '../../constants'
 import {nameOfPlaylist} from '../../constants'
 import { useThemeContext } from "../../context/theme";
+import { useGetTracksQuery } from "../../services/tracks";
+
  function MainCenterblock(props) {
+   
+     
+      const { data,  isLoading } = useGetTracksQuery();
+   
+
+  
+
+
    const params = useParams()
    const playlist = Playlist.filter((item) => item.playlist === params.id);   
    const namePlaylist = nameOfPlaylist.filter((item) => item.playlist === params.id);
 
    function PlaylistItem (prop){
-      
+      let seconds = prop.time % 60
+      function countDigits(n) {
+         for(var i = 0; n > 1; i++) {
+            n /= 10;
+         }
+         return i;
+      }
+      let secondsConvert = countDigits(seconds) === 2 ? seconds : '0' + seconds 
       return (
          <S.PlaylistItem >
              <S.PlaylistTrack >
@@ -35,7 +52,7 @@ import { useThemeContext } from "../../context/theme";
                      <S.TrackTimeSvg alt="time">
                          <use href={iconSprite + '#icon-like'}></use>
                      </S.TrackTimeSvg>
-                     <S.TrackTimeText >{props.loading ? (<div/>) : prop.time }</S.TrackTimeText>
+                     <S.TrackTimeText >{props.loading ? (<div/>) :   `${Math.floor(prop.time / 60)}:${secondsConvert}` }</S.TrackTimeText>
                  </div>
              </S.PlaylistTrack>
          </S.PlaylistItem>
@@ -98,13 +115,9 @@ function Dropdown(props) {
                                 </S.PlaylistTitleSvg>
                             </S.col04>
                         </S.ContentTitle>
-                        
-                      
-   
- 
                         <S.ContentPlaylist >
-                           {playlist.map((el, index) => (
-                              <PlaylistItem nameid={el.nameid} author={el.author} album={el.album} time={el.time} />
+                           {data.map((el, index) => (
+                              <PlaylistItem nameid={el.name} author={el.author} album={el.album} time={el.duration_in_seconds} />
                            ))}
                         </S.ContentPlaylist>                        
                     </S.CenterblockContent>
