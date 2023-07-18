@@ -8,6 +8,6 @@ export const store = configureStore({
     [tracksApi.reducerPath]: tracksApi.reducer,
   },
 
-  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(tracksApi.middleware)
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(tracksApi.middleware, authApi.middleware),
 
 });

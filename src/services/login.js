@@ -12,17 +12,19 @@ export const authApi = createApi({
 
     LoginUser: builder.mutation({
       query: (body) => ({
-        url: "login",
+        url: "login/",
         method: "POST",
         body,
       }),
     }),
     RegisterUser: builder.mutation({
       query: (body) => ({
-        url: "signup",
+        url: "signup/",
         method: "POST",
         body,
       }),
+      invalidatesTags: (result, error, id) => {},
+
     }),
 
     

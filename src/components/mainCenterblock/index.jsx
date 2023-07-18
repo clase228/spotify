@@ -10,7 +10,7 @@ import { useGetTracksQuery } from "../../services/tracks";
  function MainCenterblock(props) {
    
      
-      const { data,  isLoading } = useGetTracksQuery();
+   const { data,  isLoading } = useGetTracksQuery();
    
 
   
@@ -35,24 +35,24 @@ import { useGetTracksQuery } from "../../services/tracks";
                  <S.TrackTitle >
                      <S.TrackTitleImage  style={{background:theme.backgroundTrack}}>
                          <S.TrackTitleSvg  alt="music">
-                             <use href={props.loading ? (<div/>) : (theme.color === '#fff' ? iconSprite + '#icon-note' : iconSprite + '#icon-note-light')}></use>
+                             <use href={isLoading ? (<div/>) : (theme.color === '#fff' ? iconSprite + '#icon-note' : iconSprite + '#icon-note-light')}></use>
                          </S.TrackTitleSvg>
                      </S.TrackTitleImage>
                      <div>
-                         <S.TrackTitleLink style={{color:theme.color}} href="http://">{props.loading ? (<S.NameIdLoad/>) : prop.nameid }<S.TrackTitleSpan>{props.loading ? (<div/>) : prop.title }</S.TrackTitleSpan></S.TrackTitleLink>
+                         <S.TrackTitleLink style={{color:theme.color}} href="http://">{isLoading ? (<S.NameIdLoad/>) : prop.nameid }<S.TrackTitleSpan>{isLoading ? (<div/>) : prop.title }</S.TrackTitleSpan></S.TrackTitleLink>
                      </div>
                  </S.TrackTitle>
                  <S.TrackAuthor >
-                     <S.TrackAuthorLink style={{color:theme.color}}  href="http://">{props.loading ? (<S.AuthorLoad />) : prop.author }</S.TrackAuthorLink>
+                     <S.TrackAuthorLink style={{color:theme.color}}  href="http://">{isLoading ? (<S.AuthorLoad />) : prop.author }</S.TrackAuthorLink>
                  </S.TrackAuthor>
                  <S.TrackAlbum >
-                     <S.TrackAlbumLink style={{color:theme.color}}  href="http://">{props.loading ? (<S.AlbumLoad />) : prop.album }</S.TrackAlbumLink>
+                     <S.TrackAlbumLink style={{color:theme.color}}  href="http://">{isLoading ? (<S.AlbumLoad />) : prop.album }</S.TrackAlbumLink>
                  </S.TrackAlbum>
                  <div >
                      <S.TrackTimeSvg alt="time">
                          <use href={iconSprite + '#icon-like'}></use>
                      </S.TrackTimeSvg>
-                     <S.TrackTimeText >{props.loading ? (<div/>) :   `${Math.floor(prop.time / 60)}:${secondsConvert}` }</S.TrackTimeText>
+                     <S.TrackTimeText >{isLoading ? (<div/>) :   `${Math.floor(prop.time / 60)}:${secondsConvert}` }</S.TrackTimeText>
                  </div>
              </S.PlaylistTrack>
          </S.PlaylistItem>
@@ -116,7 +116,7 @@ function Dropdown(props) {
                             </S.col04>
                         </S.ContentTitle>
                         <S.ContentPlaylist >
-                           {data.map((el, index) => (
+                           {data?.map((el, index) => (
                               <PlaylistItem nameid={el.name} author={el.author} album={el.album} time={el.duration_in_seconds} />
                            ))}
                         </S.ContentPlaylist>                        
