@@ -1,37 +1,99 @@
 import * as S from "../login/styles";
-import Logo from '../../img/logo-dark.png'
-import { Link,useNavigate } from "react-router-dom";
-import React,{ useState} from 'react'
-import { useRegisterUserMutation } from "../../services/login";
-
+import Logo from "../../img/logo-dark.png";
+import { Link, useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import {
+  useRegisterUserMutation,
+  useLoginUserMutation,
+  useGetTokenMutation,
+} from "../../services/login";
+import { useDispatch } from "react-redux";
+import {
+  update_token,
+  update_userInfo,
+} from "../../store/actions/creators/auth";
 
 export const Register = () => {
-   const [RegisterUser, error ] = useRegisterUserMutation();
-   const navigate = useNavigate()
-   const [login, setLogin] = useState('');
-   const [password, setPassword] = useState('');
-   const [username, setusername] = useState('');
-   const handleLoginUser = () => {
-      console.log(login);
-      console.log(password);
-      console.log(username);
-      RegisterUser({
-         email: login,
-         password: password,
-         username: username,
+  const [RegisterUser, { error, status }] = useRegisterUserMutation();
+  const [loginUser, test] = useLoginUserMutation();
+  const [GetToken, { data }] = useGetTokenMutation();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const [email, setLogin] = useState("");
+  const [password, setPassword] = useState("");
+  const [username, setusername] = useState("");
+  const handleLoginUser = () => {
+    RegisterUser({
+      email: email,
+      password: password,
+      username: username,
+    });
+  };
+  useEffect(() => {
+    if (status === "fulfilled") {
+      loginUser({
+        email: email,
+        password: password,
       });
-      console.log(error);
-      
-    };
+      GetToken({
+        email: email,
+        password: password,
+      });
+    }
+  }, [status]);
+  useEffect(() => {
+    if (data?.access) {
+      dispatch(update_token(data?.access, data?.refresh));
+    }
+  }, [data]);
+  useEffect(() => {
+    if (test.data) {
+      dispatch(
+        update_userInfo(test?.data.id, test?.data.email, test?.data.username)
+        );
+        navigate("/main/main");
+    }
+  }, [test]);
+
   return (
     <S.Container>
-      <S.LoginWrapper >
-            <S.Logo src={Logo} alt='logo'/>
-            <S.LoginInput placeholder="Имя" onInput={(event) => setusername(event.target.value)}/>
-            <S.LoginInput placeholder="Логин" type="email" required onInput={(event) => setLogin(event.target.value)}/>
-            <S.LoginInput placeholder="Повторите пароль" type="password" onInput={(event) => setPassword(event.target.value)}/>
-            <S.LoginInput margined={true}  name='password' placeholder="Пароль" type="password"/>
-            <S.LoginBtn  onClick={handleLoginUser}>Зарегистрироваться</S.LoginBtn>
+      <S.LoginWrapper>
+        <S.Logo src={Logo} alt="logo" />
+        <S.LoginInputWrapper>
+          <S.LoginInput
+            placeholder="Имя"
+            onInput={(event) => setusername(event.target.value)}
+          />
+          {error?.data.username && (
+            <S.ErrorMessage>{error.data.username}</S.ErrorMessage>
+          )}
+        </S.LoginInputWrapper>
+        <S.LoginInputWrapper>
+          <S.LoginInput
+            placeholder="Почта"
+            type="email"
+            required
+            onInput={(event) => setLogin(event.target.value)}
+          />
+          {error?.data.email && (
+            <S.ErrorMessage>{error.data.email}</S.ErrorMessage>
+          )}
+        </S.LoginInputWrapper>
+        <S.LoginInputWrapper>
+          <S.LoginInput
+            placeholder="Повторите пароль"
+            type="password"
+            onInput={(event) => setPassword(event.target.value)}
+          />
+          {error?.data.password && (
+            <S.ErrorMessage>{error.data.password}</S.ErrorMessage>
+          )}
+        </S.LoginInputWrapper>
+        <S.LoginInputWrapper margined={true}>
+          <S.LoginInput name="password" placeholder="Пароль" type="password" />
+        </S.LoginInputWrapper>
+
+        <S.LoginBtn onClick={handleLoginUser}>Зарегистрироваться</S.LoginBtn>
       </S.LoginWrapper>
     </S.Container>
   );

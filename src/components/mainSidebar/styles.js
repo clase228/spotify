@@ -58,6 +58,15 @@ width: 250px;
 height: 150px;
 background: #313131;
 ` 
+export const ImgLoadText = styled.div`
+    text-align:center;
+   position: absolute;
+   left:50%;
+   top:50%;
+   transform:translate(-50%,-50%);
+   font-size:18px;
+   color:#fff;
+` 
 
 
 

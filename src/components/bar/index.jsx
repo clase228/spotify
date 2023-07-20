@@ -1,18 +1,18 @@
 
 import iconSprite from "../../img/icon/sprite.svg";
 import * as S from './styles'
-import { useState, useRef } from "react";
-import audio from '../../audio/Bobby_Marleni_-_Dropin.mp3'
+import { useState, useRef,useEffect } from "react";
 import { useThemeContext } from "../../context/theme";
 
-function Bar(props){
+function Bar({trackUrl,Play}){
+   console.log(trackUrl);
    const [isPlay,setPlay] = useState(false)
    const audioRef = useRef(null)
    const currentTimeAudio = useRef(null)
    let currentTimeInterval;
    clearInterval(currentTimeInterval)
    const handelOnOffTrack = () =>{
-      if(isPlay === false){
+      if(isPlay === false || Play ===false){
          setPlay(true)
          audioRef.current.play()
          currentTimeInterval = setInterval(() => {
@@ -24,7 +24,9 @@ function Bar(props){
          audioRef.current.pause()
       }
    }
-   
+   useEffect(()=>{
+      console.log(trackUrl);
+   },[trackUrl])
   
    const {theme} = useThemeContext()
  return (
@@ -67,14 +69,14 @@ function Bar(props){
                                 <S.TrackPlayContain >
                                     <S.TrackPlayImage>
                                         <S.TrackPlaySvg alt="music">
-                                            <use href={props.loading ? (<div/>) : (iconSprite + '#icon-note')}  ></use>
+                                            <use href={iconSprite + '#icon-note'}  ></use>
                                         </S.TrackPlaySvg>
                                     </S.TrackPlayImage>
                                     <S.TrackPlayAuthor >
-                                        <S.TrackPlayAuthorLink style={{color:theme.color}}  href="http://">  {props.loading ? (<S.NameidBarLoad  />) : ('Ты та...')}</S.TrackPlayAuthorLink>
+                                        <S.TrackPlayAuthorLink style={{color:theme.color}}  href="http://">  {'Ты та...'}</S.TrackPlayAuthorLink>
                                     </S.TrackPlayAuthor>
                                     <S.TrackPlayAlbum >
-                                        <S.TrackPlayAlbumLink style={{color:theme.color}}  href="http://">{props.loading ? (<S.NameidBarLoad  />) : ('Баста')}</S.TrackPlayAlbumLink>
+                                        <S.TrackPlayAlbumLink style={{color:theme.color}}  href="http://">{'Баста'}</S.TrackPlayAlbumLink>
                                     </S.TrackPlayAlbum>
                                 </S.TrackPlayContain>
 
@@ -108,7 +110,7 @@ function Bar(props){
                     </S.BarPlayerBlock>
                 </S.BarContent>
                 <S.HiddenAudio controls ref={audioRef} >
-                  <source  src={audio}  type="audio/mpeg" />
+                  <source  src={trackUrl}  type="audio/mpeg" />
                 </S.HiddenAudio>
             </S.Bar>
  )

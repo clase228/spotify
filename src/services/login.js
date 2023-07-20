@@ -23,7 +23,14 @@ export const authApi = createApi({
         method: "POST",
         body,
       }),
-      invalidatesTags: (result, error, id) => {},
+
+    }),
+    GetToken: builder.mutation({
+      query: (body) => ({
+        url: "token/",
+        method: "POST",
+        body,
+      }),
 
     }),
 
@@ -32,4 +39,4 @@ export const authApi = createApi({
 });
 
 
-export const { useLoginUserMutation, useRegisterUserMutation } = authApi;
+export const { useLoginUserMutation, useRegisterUserMutation, useGetTokenMutation } = authApi;

@@ -2,7 +2,6 @@ import styled from "styled-components";
 
 export const LoginWrapper = styled.div`
    width: 366px;
-   height: 439px;
    background: #FFFFFF;
    border-radius: 12px;
    display:flex;
@@ -47,7 +46,8 @@ export const LoginInput = styled.input`
    border: 0;
    outline:none;
    border-bottom: 1px solid #D0CECE;
-   margin-bottom: ${props => (props.margined ? '60px':'38px')};
+   
+   margin-bottom: 8px;
    padding-bottom: 8px;
    height: 30px;
    font-size: 18px;
@@ -62,4 +62,13 @@ export const LoginInput = styled.input`
    color: #E1E1E1;
  }
    
+ }`
+ export const ErrorMessage = styled.div`
+   color:#f1416c;
+   width: 278.5px;
+ 
+ }`
+ export const LoginInputWrapper = styled.div`
+ font-size: 14px;
+ margin-bottom: ${props => (props.margined ? '60px':'30px')};
  }`

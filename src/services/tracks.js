@@ -10,11 +10,26 @@ export const tracksApi = createApi({
     getTracks: builder.query({
       query: () => "all"
     }),
-    
+    likeTrack: builder.mutation({
+      query(data) {
+         return {
+           url: `${data}/favorite/`,
+           method: "GET",
+         };
+       },
+    }),
+    getTrack: builder.mutation({
+      query(data) {
+         return {
+           url: `${data}/favorite/`,
+           method: "GET",
+         };
+       },
+    }),
 
     
   }),
 });
 
 
-export const { useGetTracksQuery } = tracksApi;
+export const { useGetTracksQuery, useLikeTrackMutation,useGetTrackMutation } = tracksApi;
