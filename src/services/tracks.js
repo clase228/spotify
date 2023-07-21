@@ -12,9 +12,16 @@ export const tracksApi = createApi({
     }),
     likeTrack: builder.mutation({
       query(data) {
+         const {id,authorization} = data
          return {
-           url: `${data}/favorite/`,
+           url: `${id}/favorite/`,
            method: "GET",
+           headers:{
+            "content-type": "application/x-www-form-urlencoded",
+            "headers": "Access-Control-Allow-Origin', '*",
+            "Access-Control-Allow-Headers": "Origin, X-Requested-With",
+            "authorization ": `Bearer ${authorization}`
+           }
          };
        },
     }),

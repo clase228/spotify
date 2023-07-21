@@ -7,7 +7,6 @@ import Bar from "../../components/bar";
 export const Main = () => {
   const [loading, setLoading] = useState(true);
   const [trackUrl, setTrackUrl] = useState(true);
-  const [Play,setPlay] = useState(false)
   useEffect(() => {
     // эмуляция загрузки данных
     setTimeout(() => {
@@ -16,7 +15,6 @@ export const Main = () => {
   }, []);
 function playTrack(trackUrl) {
    setTrackUrl(trackUrl)
-   setPlay(false)
 }
   return (
    <S.Container >
@@ -24,7 +22,7 @@ function playTrack(trackUrl) {
       <MainNav />
       <MainCenterblock playTrack={playTrack} loading={loading}/>
       <MainSidebar loading={loading}   />
-      <Bar trackUrl={trackUrl} Play={Play}   />
+      <Bar trackUrl={trackUrl}    />
     </S.MainBlock>
    </S.Container>
       

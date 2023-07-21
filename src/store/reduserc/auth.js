@@ -16,8 +16,8 @@ export default function todoReducer(state = initialState, action) {
     case UPDATE_TOKEN: {
       const { access, refresh } = action.payload;
 
-      console.log(access);
       return {
+         ...state,
          access:access,
          refresh:refresh
       };

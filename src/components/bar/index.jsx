@@ -5,16 +5,16 @@ import { useState, useRef,useEffect } from "react";
 import { useThemeContext } from "../../context/theme";
 
 function Bar({trackUrl,Play}){
-   console.log(trackUrl);
    const [isPlay,setPlay] = useState(false)
    const audioRef = useRef(null)
    const currentTimeAudio = useRef(null)
    let currentTimeInterval;
    clearInterval(currentTimeInterval)
    const handelOnOffTrack = () =>{
-      if(isPlay === false || Play ===false){
+      if(!isPlay){
          setPlay(true)
-         audioRef.current.play()
+        console.log(audioRef.current);
+        audioRef.current.play()
          currentTimeInterval = setInterval(() => {
             currentTimeAudio.current.style.width = audioRef.current.currentTime / audioRef.current.duration * 100 + '%'
          }, 1);
@@ -109,9 +109,7 @@ function Bar({trackUrl,Play}){
                         </S.BarVolume>
                     </S.BarPlayerBlock>
                 </S.BarContent>
-                <S.HiddenAudio controls ref={audioRef} >
-                  <source  src={trackUrl}  type="audio/mpeg" />
-                </S.HiddenAudio>
+                <S.HiddenAudio controls  src={trackUrl} ref={audioRef}/>
             </S.Bar>
  )
 }

@@ -13,6 +13,10 @@ export const Login = () => {
    const [loginUser, {error,status,data}] = useLoginUserMutation();
    const [email, setEmail] = useState('');
    const [password, setPassword] = useState('');
+   const [isUserInfo, setIsUserInfo] = useState(false);
+   const [isTocken, setIsTocken] = useState(false);
+
+
    const dispatch = useDispatch();
    const navigate = useNavigate();
    const handleLoginUser = () => {
@@ -23,29 +27,28 @@ export const Login = () => {
     };
     useEffect(()=>{
       if (status === "fulfilled") {
-         console.log('GetToken');
          GetToken({
            email: email,
            password: password,
          });
-         console.log(getTokenData);
       }
     },[status])
     useEffect(() => {
+         if (getTokenData !== undefined) {
+            dispatch(update_token(getTokenData?.access, getTokenData?.refresh));
+            setIsTocken(true)
+         }
+      }, [getTokenData]);
       
-         console.log('12',getTokenData)
-         dispatch(update_token(getTokenData?.access, getTokenData?.refresh));
-
-      
-    }, [getTokenData]);
-   
-    useEffect(() => {
-      if (data) {
-        dispatch(update_userInfo(data?.id, data?.email, data?.username)
-          );
-          navigate("/main/main");
-      }
-    }, [data]);
+      useEffect(() => {
+         if (data) {
+            dispatch(update_userInfo(data?.id, data?.email, data?.username));
+            setIsUserInfo(true)
+         }
+      }, [data]);
+      if (isUserInfo && isTocken) {
+         navigate("/main/main")
+    }
   return (
     <S.Container>
       <S.LoginWrapper>

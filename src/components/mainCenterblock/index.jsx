@@ -1,5 +1,5 @@
 import iconSprite from "../../img/icon/sprite.svg";
-import  { useState } from 'react';
+import  { useState,useEffect } from 'react';
 import { useParams } from "react-router-dom";
 import * as S from './styles'
 import {Playlist} from '../../constants'
@@ -7,36 +7,52 @@ import {nameOfPlaylist} from '../../constants'
 import { useThemeContext } from "../../context/theme";
 import { useGetTracksQuery,useLikeTrackMutation } from "../../services/tracks";
 import { useGetCatalogQuery } from "../../services/catalog" 
+import { useSelector } from "react-redux";
+import { authSelector } from "../../store/selectors/auth"
 
 function MainCenterblock({playTrack,loading}) {
+   const [test, setTest] = useState();
    let Gdata;
    let GisLoading;
    
-   const [LikeTrack]  = useLikeTrackMutation();
-   
+   const auth_data = useSelector(authSelector);
+   const [LikeTrack, data]  = useLikeTrackMutation();
    const params = useParams()
    const playlist = Playlist.filter((item) => item.playlist === params.id);   
 
    let namePlaylist
 
-   const {data:getTokenData} = useGetTracksQuery();
+   const {data:getTracksData} = useGetTracksQuery();
    const {data:getCatalogData} = useGetCatalogQuery()
    
    if (params.id === 'main') {
-      Gdata = getTokenData
+      Gdata = getTracksData
       namePlaylist = 'Треки'
    }else if(params.id !== 'my'){
       namePlaylist = getCatalogData[params.id - 1].items[0].genre
       Gdata = getCatalogData[params.id - 1].items
-
+   }else if(params.id === 'my'){
+      namePlaylist = 'Мои треки'
+      Gdata = []
+      let favorite = getTracksData
+      favorite.forEach((el,i) =>{
+         el.stared_user.forEach((el1,i1)=>{
+            if (el1.id === auth_data.user_id) {
+               Gdata.push(favorite[i])
+            }else{
+            }
+         })
+      })
+     
+   
    }
    
 function handleMouseEnter(event,id) {
-   console.log(document.getElementById('8'));
+   
    
 }
 function handleMouseLeave(event,id) {
-   console.log(document.getElementById('8'));
+ 
    
 }
    function PlaylistItem (prop){
@@ -49,7 +65,7 @@ function handleMouseLeave(event,id) {
       }
       let secondsConvert = countDigits(seconds) === 2 ? seconds : '0' + seconds 
       function handleToggleLike(id) {
-         LikeTrack(id)
+         LikeTrack({id, authorization: `${auth_data.access}`})
       }
       return (
          <S.PlaylistItem id={prop.id}  onMouseEnter={(event) => handleMouseEnter(event,prop.id)} onMouseLeave={(event) =>handleMouseLeave(event,prop.id)}>
@@ -83,18 +99,38 @@ function handleMouseLeave(event,id) {
 
 
 const [visibleFilter, setVisibleFilter] = useState(null);
-
+let startGdata = Gdata
+let filterAuthor = [];
+let filterDate=[]
+let filterGenre=[]
 const toggleVisibleFilter = (filter) => {
   setVisibleFilter(visibleFilter === filter ? null : filter);
 };
-
+function handleSort(e,typeFilter) {
+   Gdata = startGdata
+   if (typeFilter === 'author') {
+      e.target.classList.contains('active')  ? filterAuthor.forEach((item, index) => {if (item == e.target.textContent) {delete filterAuthor[index];}}): filterAuthor.push(e.target.textContent)
+      Gdata.forEach((el,i)=>{
+         filterAuthor.forEach((el1,i1)=>{
+            Gdata = Gdata.filter(item => filterAuthor.includes(item.author));
+         })
+      })
+      console.log(filterAuthor);
+      console.log(Gdata);
+   }else if(typeFilter === 'date')  {
+      console.log('date');
+   }else if(typeFilter === 'genre') {
+      console.log('genre');
+   }
+   e.target.classList.contains('active') ? e.target.classList.remove('active') :e.target.classList.add('active')
+}
 
 const {theme} = useThemeContext()
 function Dropdown(props) {
    const res = []
 
    props.content.map(el => {
-      res.push(<S.DropdownList style={{color:theme.color}}>{el}</S.DropdownList>
+      res.push(<S.DropdownList style={{color:theme.color}} onClick={(e) =>handleSort(e,props.typeFilter)}>{el}</S.DropdownList>
       )
    })
    return(
@@ -107,8 +143,34 @@ function Dropdown(props) {
    </S.Dropdown>
    )
 }
-
+let author = []
+let genre = []
+let date = []
+Gdata?.forEach(el=>{
+   author.push(el.author)
+   genre.push(el.genre)
+   let str = el.release_date
+   if (typeof str === 'string') {
+      date.push(str.substr(0, str.length - 6))
+   }
+   
+})
+function uniq_fast(a) {
+   var seen = {};
+   var out = [];
+   var len = a.length;
+   var j = 0;
+   for(var i = 0; i < len; i++) {
+        var item = a[i];
+        if(seen[item] !== 1) {
+              seen[item] = 1;
+              out[j++] = item;
+        }
+   }
+   return out;
+}
    return (
+      
       <S.MainCenterblock style={{background: theme.background}}  >
                     <S.CenterblockSearch >
                         <S.SearchSvg >
@@ -119,9 +181,9 @@ function Dropdown(props) {
                     <S.CenterblockH2 style={{color: theme.color}}>{namePlaylist}</S.CenterblockH2>
                     <S.CenterblockFilter  >
                         <S.FilterTitle style={{color: theme.color}}>Искать по:</S.FilterTitle>
-                        <Dropdown id="nameid" name="Исполнителю" content={['Michael Jackson', 'Frank Sinatra', 'Calvin Harris', 'Arctic Monkeys', 'Zhu', 'Michael Jackson', 'Frank Sinatra', 'Calvin Harris', 'Arctic Monkeys', 'Zhu', 'Michael Jackson', 'Frank Sinatra', 'Calvin Harris', 'Arctic Monkeys', 'Zhu']}/>
-                        <Dropdown id="year" name="Году выпуска" content={['Michael Jackson', 'Frank Sinatra', 'Calvin Harris', 'Arctic Monkeys', 'Zhu', 'Michael Jackson', 'Frank Sinatra', 'Calvin Harris', 'Arctic Monkeys', 'Zhu', 'Michael Jackson', 'Frank Sinatra', 'Calvin Harris', 'Arctic Monkeys', 'Zhu']}/>
-                        <Dropdown id="genre" name="Жанру" content={['Michael Jackson', 'Frank Sinatra', 'Calvin Harris', 'Arctic Monkeys', 'Zhu', 'Michael Jackson', 'Frank Sinatra', 'Calvin Harris', 'Arctic Monkeys', 'Zhu', 'Michael Jackson', 'Frank Sinatra', 'Calvin Harris', 'Arctic Monkeys', 'Zhu']}/>
+                        <Dropdown id="nameid" name="Исполнителю" typeFilter='author' content={uniq_fast(author).sort()}/>
+                        <Dropdown id="year" name="Году выпуска" typeFilter='date' content={uniq_fast(date).sort()}/>
+                        <Dropdown id="genre" name="Жанру" typeFilter='genre' content={uniq_fast(genre).sort()}/>
                     </S.CenterblockFilter>
 
                     <S.CenterblockContent >
@@ -137,9 +199,12 @@ function Dropdown(props) {
                             </S.col04>
                         </S.ContentTitle>
                         <S.ContentPlaylist >
-                           {Gdata?.map((el, index) => (
-                              <PlaylistItem trackUrl={el.track_file} id={el.id} nameid={el.name} author={el.author} album={el.album} time={el.duration_in_seconds} />
-                           ))}
+                           {
+                             
+                              Gdata?.map((el, index) => (
+                                 <PlaylistItem trackUrl={el.track_file} id={el.id} nameid={el.name} author={el.author} album={el.album} time={el.duration_in_seconds} />
+                              ))
+                            }
                         </S.ContentPlaylist>                        
                     </S.CenterblockContent>
                 </S.MainCenterblock>

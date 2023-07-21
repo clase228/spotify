@@ -259,7 +259,7 @@ export const DropdownList = styled.div`
   cursor: pointer;
   &.active {
     text-decoration-line: underline;
-    color: #b672ff;
+    color: #b672ff!important;
   }
 `;
 export const _btnText = styled.div`

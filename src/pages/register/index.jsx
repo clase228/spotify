@@ -29,6 +29,8 @@ export const Register = () => {
       username: username,
     });
   };
+  const [isUserInfo, setIsUserInfo] = useState(false);
+  const [isTocken, setIsTocken] = useState(false);
   useEffect(() => {
     if (status === "fulfilled") {
       loginUser({
@@ -44,6 +46,7 @@ export const Register = () => {
   useEffect(() => {
     if (data?.access) {
       dispatch(update_token(data?.access, data?.refresh));
+      setIsTocken(true)
     }
   }, [data]);
   useEffect(() => {
@@ -51,10 +54,12 @@ export const Register = () => {
       dispatch(
         update_userInfo(test?.data.id, test?.data.email, test?.data.username)
         );
-        navigate("/main/main");
+        setIsTocken(true)
     }
   }, [test]);
-
+  if (isUserInfo && isTocken) {
+   navigate("/main/main")
+}
   return (
     <S.Container>
       <S.LoginWrapper>
