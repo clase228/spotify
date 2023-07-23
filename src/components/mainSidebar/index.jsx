@@ -12,7 +12,6 @@ function MainSidebar(props) {
    const auth_data = useSelector(authSelector);
    function SidebarItem(prop) {
       return (
-         
          <S.SidebarItem >
               <Link to={`/main/` + prop.plnumber} >
                <S.ImgLoad>

@@ -6,23 +6,29 @@ import MainSidebar from "../../components/mainSidebar";
 import Bar from "../../components/bar";
 export const Main = () => {
   const [loading, setLoading] = useState(true);
-  const [trackUrl, setTrackUrl] = useState(true);
+  const [trackUrl, setTrackUrl] = useState('');
+  const [isPlay, setIsplay] = useState(false);
   useEffect(() => {
     // эмуляция загрузки данных
     setTimeout(() => {
       setLoading(false);
     }, 5000);
   }, []);
-function playTrack(trackUrl) {
+function playTrackInfo(trackUrl) {
    setTrackUrl(trackUrl)
+   setIsplay(true)
 }
+function playTrackButton(params) {
+   isPlay ? setIsplay(false) :setIsplay(true)
+}
+
   return (
    <S.Container >
     <S.MainBlock>
       <MainNav />
-      <MainCenterblock playTrack={playTrack} loading={loading}/>
+      <MainCenterblock playTrack={playTrackInfo} loading={loading}/>
       <MainSidebar loading={loading}   />
-      <Bar trackUrl={trackUrl}    />
+      <Bar trackUrl={trackUrl} isPlay={isPlay} playTrackButton={playTrackButton}  />
     </S.MainBlock>
    </S.Container>
       

@@ -77,7 +77,7 @@ export const TrackPlaySvg = styled.svg`
 `
 export const TrackPlayAuthor = styled.div`
 grid-area: author;
-min-width: 49px;
+   width: auto;
 `
 export const TrackPlayAuthorLink = styled.a`
 font-style: normal;
@@ -89,7 +89,7 @@ font-style: normal;
 `
 export const TrackPlayAlbum = styled.div`
    grid-area: album;
-   min-width: 49px;
+      width: auto;
 `
 export const TrackPlayAlbumLink = styled.a`
    font-style: normal;

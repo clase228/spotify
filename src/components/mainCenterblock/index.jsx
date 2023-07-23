@@ -2,29 +2,24 @@ import iconSprite from "../../img/icon/sprite.svg";
 import  { useState,useEffect } from 'react';
 import { useParams } from "react-router-dom";
 import * as S from './styles'
-import {Playlist} from '../../constants'
-import {nameOfPlaylist} from '../../constants'
 import { useThemeContext } from "../../context/theme";
-import { useGetTracksQuery,useLikeTrackMutation } from "../../services/tracks";
+import { useGetTracksQuery } from "../../services/tracks";
 import { useGetCatalogQuery } from "../../services/catalog" 
 import { useSelector } from "react-redux";
 import { authSelector } from "../../store/selectors/auth"
-
+import { PlaylistItem } from "../PlaylistItem";
 function MainCenterblock({playTrack,loading}) {
-   const [test, setTest] = useState();
+   
+   let namePlaylist
    let Gdata;
    let GisLoading;
-   
+ 
    const auth_data = useSelector(authSelector);
-   const [LikeTrack, data]  = useLikeTrackMutation();
    const params = useParams()
-   const playlist = Playlist.filter((item) => item.playlist === params.id);   
 
-   let namePlaylist
 
    const {data:getTracksData} = useGetTracksQuery();
    const {data:getCatalogData} = useGetCatalogQuery()
-   
    if (params.id === 'main') {
       Gdata = getTracksData
       namePlaylist = 'Треки'
@@ -43,86 +38,40 @@ function MainCenterblock({playTrack,loading}) {
             }
          })
       })
-     
-   
    }
    
-function handleMouseEnter(event,id) {
-   
-   
-}
-function handleMouseLeave(event,id) {
- 
-   
-}
-   function PlaylistItem (prop){
-      let seconds = prop.time % 60
-      function countDigits(n) {
-         for(var i = 0; n > 1; i++) {
-            n /= 10;
-         }
-         return i;
-      }
-      let secondsConvert = countDigits(seconds) === 2 ? seconds : '0' + seconds 
-      function handleToggleLike(id) {
-         LikeTrack({id, authorization: `${auth_data.access}`})
-      }
-      return (
-         <S.PlaylistItem id={prop.id}  onMouseEnter={(event) => handleMouseEnter(event,prop.id)} onMouseLeave={(event) =>handleMouseLeave(event,prop.id)}>
-             <S.PlaylistTrack >
-                 <S.TrackTitle >
-                     <S.TrackTitleImage onClick={() =>playTrack(prop.trackUrl)} style={{background:theme.backgroundTrack}}>
-                         <S.TrackTitleSvg  alt="music">
-                             <use href={loading ? (<div/>) : (theme.color === '#fff' ? iconSprite + '#icon-note' : iconSprite + '#icon-note-light')}></use>
-                         </S.TrackTitleSvg>
-                     </S.TrackTitleImage>
-                     <div>
-                         <S.TrackTitleLink style={{color:theme.color}}>{loading ? (<S.NameIdLoad/>) : prop.nameid }<S.TrackTitleSpan>{loading ? (<div/>) : prop.title }</S.TrackTitleSpan></S.TrackTitleLink>
-                     </div>
-                 </S.TrackTitle>
-                 <S.TrackAuthor >
-                     <S.TrackAuthorLink style={{color:theme.color}}  >{loading ? (<S.AuthorLoad />) : prop.author }</S.TrackAuthorLink>
-                 </S.TrackAuthor>
-                 <S.TrackAlbum >
-                     <S.TrackAlbumLink style={{color:theme.color}}  >{loading ? (<S.AlbumLoad />) : prop.album }</S.TrackAlbumLink>
-                 </S.TrackAlbum>
-                 <div >
-                     <S.TrackTimeSvg alt="time" onClick={() => handleToggleLike(prop.id)}>
-                         <use href={iconSprite + '#icon-like'} ></use>
-                     </S.TrackTimeSvg>
-                     <S.TrackTimeText >{loading ? (<div/>) :   `${Math.floor(prop.time / 60)}:${secondsConvert}` }</S.TrackTimeText>
-                 </div>
-             </S.PlaylistTrack>
-         </S.PlaylistItem>
-      );
-   }
-
-
 const [visibleFilter, setVisibleFilter] = useState(null);
 let startGdata = Gdata
 let filterAuthor = [];
 let filterDate=[]
 let filterGenre=[]
+
 const toggleVisibleFilter = (filter) => {
   setVisibleFilter(visibleFilter === filter ? null : filter);
 };
+const [selectedFilters, setSelectedFilter] = useState({genres: [], authors: []}) 
 function handleSort(e,typeFilter) {
-   Gdata = startGdata
+   const filtersTrack = Gdata.filter((track) => {
+      if(selectedFilters.genres.length){ 
+     }
+      if(selectedFilters.authors.length){
+     }
+  }) 
+  console.log(selectedFilters.genres.length);
    if (typeFilter === 'author') {
-      e.target.classList.contains('active')  ? filterAuthor.forEach((item, index) => {if (item == e.target.textContent) {delete filterAuthor[index];}}): filterAuthor.push(e.target.textContent)
-      Gdata.forEach((el,i)=>{
-         filterAuthor.forEach((el1,i1)=>{
-            Gdata = Gdata.filter(item => filterAuthor.includes(item.author));
-         })
-      })
-      console.log(filterAuthor);
-      console.log(Gdata);
-   }else if(typeFilter === 'date')  {
-      console.log('date');
-   }else if(typeFilter === 'genre') {
-      console.log('genre');
+      e.target.classList.contains('active')  ? filterAuthor.forEach((item, index) => {if (item == e.target.textContent) {delete filterAuthor[index]}}): filterAuthor.push(e.target.textContent)
+      setSelectedFilter({genres: [filterGenre], authors: [filterAuthor]})
    }
+   if(typeFilter === 'genre') {
+      e.target.classList.contains('active')  ? filterGenre.forEach((item, index) => {if (item == e.target.textContent) {delete filterGenre[index]}}): filterGenre.push(e.target.textContent)
+      setSelectedFilter({genres: [filterGenre], authors: [filterAuthor]})
+       }
    e.target.classList.contains('active') ? e.target.classList.remove('active') :e.target.classList.add('active')
+   // else if(typeFilter === 'date')  {
+   //    console.log('date');
+   // }else if(typeFilter === 'genre') {
+   //    console.log('genre');
+   // }
 }
 
 const {theme} = useThemeContext()
@@ -202,7 +151,8 @@ function uniq_fast(a) {
                            {
                              
                               Gdata?.map((el, index) => (
-                                 <PlaylistItem trackUrl={el.track_file} id={el.id} nameid={el.name} author={el.author} album={el.album} time={el.duration_in_seconds} />
+                                 
+                                 <PlaylistItem loading={loading} playTrack={playTrack} trackUrl={el} stared_user={el.stared_user} id={el.id} name={el.name} author={el.author} album={el.album} duration_in_seconds={el.duration_in_seconds} />
                               ))
                             }
                         </S.ContentPlaylist>                        

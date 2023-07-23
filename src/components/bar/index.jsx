@@ -4,15 +4,15 @@ import * as S from './styles'
 import { useState, useRef,useEffect } from "react";
 import { useThemeContext } from "../../context/theme";
 
-function Bar({trackUrl,Play}){
-   const [isPlay,setPlay] = useState(false)
+function Bar({trackUrl,isPlay,playTrackButton}){
+   console.log(isPlay);
    const audioRef = useRef(null)
    const currentTimeAudio = useRef(null)
    let currentTimeInterval;
    clearInterval(currentTimeInterval)
    const handelOnOffTrack = () =>{
       if(!isPlay){
-         setPlay(true)
+         playTrackButton()
         console.log(audioRef.current);
         audioRef.current.play()
          currentTimeInterval = setInterval(() => {
@@ -20,14 +20,10 @@ function Bar({trackUrl,Play}){
          }, 1);
       }else{
          clearInterval(currentTimeInterval)
-         setPlay(false)
+         playTrackButton()
          audioRef.current.pause()
       }
    }
-   useEffect(()=>{
-      console.log(trackUrl);
-   },[trackUrl])
-  
    const {theme} = useThemeContext()
  return (
    <S.Bar style={{background: theme.background}}>
@@ -73,10 +69,10 @@ function Bar({trackUrl,Play}){
                                         </S.TrackPlaySvg>
                                     </S.TrackPlayImage>
                                     <S.TrackPlayAuthor >
-                                        <S.TrackPlayAuthorLink style={{color:theme.color}}  href="http://">  {'Ты та...'}</S.TrackPlayAuthorLink>
+                                        <S.TrackPlayAuthorLink style={{color:theme.color}}  href="http://">  {trackUrl.name}</S.TrackPlayAuthorLink>
                                     </S.TrackPlayAuthor>
                                     <S.TrackPlayAlbum >
-                                        <S.TrackPlayAlbumLink style={{color:theme.color}}  href="http://">{'Баста'}</S.TrackPlayAlbumLink>
+                                        <S.TrackPlayAlbumLink style={{color:theme.color}}  href="http://">{trackUrl.author}</S.TrackPlayAlbumLink>
                                     </S.TrackPlayAlbum>
                                 </S.TrackPlayContain>
 
@@ -109,7 +105,7 @@ function Bar({trackUrl,Play}){
                         </S.BarVolume>
                     </S.BarPlayerBlock>
                 </S.BarContent>
-                <S.HiddenAudio controls  src={trackUrl} ref={audioRef}/>
+                <S.HiddenAudio controls  src={trackUrl.track_file} ref={audioRef}/>
             </S.Bar>
  )
 }
