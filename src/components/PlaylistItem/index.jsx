@@ -44,8 +44,8 @@ export function PlaylistItem ({loading,playTrack,trackUrl,stared_user,id,name,au
       UnLikeTrack({id, authorization: `${auth_data.access}`})
    }
    let isLiked
-   // for (let i = 0; i < staredUser.length; i++) {
-   //    if (staredUser[i].id === auth_data.user_id) {
+   // for (let i = 0; i < stared_user.length; i++) {
+   //    if (stared_user[i].id === auth_data.user_id) {
    //       isLiked=true
    //       break;
    //    }else{

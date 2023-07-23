@@ -81,7 +81,9 @@ describe("Tracks feature", () => {
   afterAll(() => server.close());
 
   it("should show requested data", async () => {
-    render(<PlaylistItem />, { wrapper: storeRef.wrapper });
+   console.log(handlers);
+   console.log(handlers.ctx.json());
+    render(<PlaylistItem name={'Classical Metal Workout'}/>, { wrapper: storeRef.wrapper });
     expect(await screen.findByText(/Classical Metal Workout/i)).toBeInTheDocument();
   });
 });
