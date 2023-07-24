@@ -1,11 +1,67 @@
 import React from "react";
 import { setupApiStore } from "../tests-utils";
 import { PlaylistItem } from "./PlaylistItem"; 
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import { rest } from "msw";
 import { setupServer } from "msw/node";
 import { tracksApi } from "../services/tracks";
-
+import { loginApi } from "../services/login";
+import { Login } from "../pages/login";
+const constant = {
+   "id": 33,
+   "name": "Classical Metal Workout",
+   "author": "-",
+   "release_date": "1991-09-06",
+   "genre": "Рок музыка",
+   "duration_in_seconds": 246,
+   "album": "Workout",
+   "logo": null,
+   "track_file": "https://painassasin.online/media/music_files/Musiclfiles_-_Classical_Metal_Workout.mp3",
+   "stared_user": [
+       {
+           "id": 83,
+           "username": "zick3333@mail.ru",
+           "first_name": "",
+           "last_name": "",
+           "email": "zick3333@mail.ru"
+       },
+       {
+           "id": 469,
+           "username": "gerargef11@mail.ru",
+           "first_name": "",
+           "last_name": "",
+           "email": "gerargef11@mail.ru"
+       },
+       {
+           "id": 503,
+           "username": "2222222222222222222222222222@tut.by",
+           "first_name": "",
+           "last_name": "",
+           "email": "2222222222222222222222222222@tut.by"
+       },
+       {
+           "id": 630,
+           "username": "mar_r@mail.rur",
+           "first_name": "",
+           "last_name": "",
+           "email": "mar_r@mail.rur"
+       },
+       {
+           "id": 599,
+           "username": "distanceOn",
+           "first_name": "",
+           "last_name": "",
+           "email": "ro_shev@inbox.ru"
+       },
+       {
+           "id": 690,
+           "username": "lawa",
+           "first_name": "",
+           "last_name": "",
+           "email": "lawa@yandex.com"
+       }
+   ]
+}
 // Описываем endpoint-ы, которые хотим замокировать
 export const handlers = [
   rest.get('https://painassasin.online/catalog/track/all', (req, res, ctx) => {
@@ -67,6 +123,10 @@ export const handlers = [
      }])
     );
   }),
+  rest.put('${BASE_API_URL}/todos/1', (req, res, ctx) => {
+   return res(ctx.json({ completed: true }));
+ }),
+
 ];
 
 // Готовим моковый сервер
@@ -74,6 +134,7 @@ const server = setupServer(...handlers);
 
 // Мокируем api store
 const storeRef = setupApiStore(tracksApi);
+const loginRef = setupApiStore(loginApi);
 
 describe("Tracks feature", () => {
   beforeAll(() => server.listen());
@@ -81,9 +142,39 @@ describe("Tracks feature", () => {
   afterAll(() => server.close());
 
   it("should show requested data", async () => {
-   console.log(handlers);
-   console.log(handlers.ctx.json());
-    render(<PlaylistItem name={'Classical Metal Workout'}/>, { wrapper: storeRef.wrapper });
+    render(<PlaylistItem  trackUrl={constant} stared_user={constant.stared_user} id={constant.id} name={constant.name} author={constant.author} album={constant.album} duration_in_seconds={constant.duration_in_seconds} />, { wrapper: storeRef.wrapper });
     expect(await screen.findByText(/Classical Metal Workout/i)).toBeInTheDocument();
   });
+
+
+ it("should update todo item by click", async () => {
+   render(<Login email='glo50' password='qwe123123'/>, { wrapper: loginRef.wrapper });
+
+   fireEvent.click(await screen.findByText("Войти"));
+
+   server.use(
+     rest.post('https://painassasin.online/user/login/', (req, res, ctx) => {
+       return res(
+         ctx.json([{ completed: true, id: "1", title: "My first todo" }])
+       );
+     })
+   );
+
+   expect(await screen.findByText("Classical Metal Workout")).toBeInTheDocument();
+ });
+//  it("should update todo item by click", async () => {
+//    render(<PlaylistItem  trackUrl={constant} stared_user={constant.stared_user} id={constant.id} name={constant.name} author={constant.author} album={constant.album} duration_in_seconds={constant.duration_in_seconds} />, { wrapper: storeRef.wrapper });
+
+//    fireEvent.click(await screen.getByRole("svgHeart"));
+
+//    server.use(
+//      rest.post('https://painassasin.online/catalog/track/33/favorite/', (req, res, ctx) => {
+//        return res(
+//          ctx.json([{ completed: true, id: "1", title: "My first todo" }])
+//        );
+//      })
+//    );
+
+//    expect(await screen.findByText("Classical Metal Workout")).toBeInTheDocument();
+//  });
 });

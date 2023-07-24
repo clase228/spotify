@@ -76,7 +76,7 @@ export function PlaylistItem ({loading,playTrack,trackUrl,stared_user,id,name,au
               </S.TrackAlbum>
               <div >
                   <S.TrackTimeSvg alt="time" onClick={isLiked ?  () => handleToggUnleLike(id): () => handleToggleLike(id)}>
-                      <use style={{stroke: isLiked ? 'red':'#696969',fill: isLiked ? 'red':'transparent'}} href={iconSprite + '#icon-like'} ></use>
+                      <use role="svgHeart" data-type='heart' style={{stroke: isLiked ? 'red':'#696969',fill: isLiked ? 'red':'transparent'}} href={iconSprite + '#icon-like'} ></use>
                   </S.TrackTimeSvg>
                   <S.TrackTimeText >{loading ? (<div/>) :   `${Math.floor(duration_in_seconds / 60)}:${secondsConvert}` }</S.TrackTimeText>
               </div>
