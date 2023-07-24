@@ -52,13 +52,12 @@ const toggleVisibleFilter = (filter) => {
 const [activeElement, setActiveElement] = useState(null);
 const [selectedFilters, setSelectedFilter] = useState({genres: [], authors: []}) 
 const filtersTrack = Gdata?.filter((track) => {
-   if(selectedFilters.genres.length){ 
-      filtersTrack.push(track)
-  }
-   if(selectedFilters.authors.length){
-      filtersTrack.push(track)
-  }
+   const isGenreMatched = !selectedFilters.genres.length || selectedFilters.genres.includes(track.genre);
+   const isAuthorMatched = !selectedFilters.authors.length || selectedFilters.authors.includes(track.author);
+ 
+   return isGenreMatched && isAuthorMatched;
 }) 
+console.log(filtersTrack);
 const handleAddGenreFilter = (genre,elem) => {
    setSelectedFilter((prevFilters) => {
      const isGenreAlreadySelected = prevFilters.genres.includes(genre);
@@ -104,26 +103,14 @@ const handleAddGenreFilter = (genre,elem) => {
 
 
 console.log(selectedFilters);
-function handleSort(e,typeFilter) {
-  console.log(selectedFilters.genres.length);
-   if (typeFilter === 'author') {
-      e.target.classList.contains('active')  ? filterAuthor.forEach((item, index) => {if (item == e.target.textContent) {delete filterAuthor[index]}}): filterAuthor.push(e.target.textContent)
-      setSelectedFilter({genres: [filterGenre], authors: [filterAuthor]})
-   }
-   if(typeFilter === 'genre') {
-      e.target.classList.contains('active')  ? filterGenre.forEach((item, index) => {if (item == e.target.textContent) {delete filterGenre[index]}}): filterGenre.push(e.target.textContent)
-      setSelectedFilter({genres: [filterGenre], authors: [filterAuthor]})
-       }
-   e.target.classList.contains('active') ? e.target.classList.remove('active') :e.target.classList.add('active')
- 
-}
+
 
 const {theme} = useThemeContext()
 function Dropdown(props) {
    const res = []
 
    props.content.map(el => {
-      res.push(<S.DropdownList style={{color:theme.color}} className={activeElement === el ? 'active' : ''} onClick={el.typeFilter === author ? (e)=>handleAddGenreFilter(el,e):(e)=>handleAddAuthorFilter(el,e)}>{el}</S.DropdownList>
+      res.push(<S.DropdownList style={{color:theme.color}} className={activeElement === el ? 'active' : ''} onClick={props.typeFilter === 'author' ? (e)=>handleAddAuthorFilter(el,e):(e)=>handleAddGenreFilter(el,e)}>{el}</S.DropdownList>
       )
    })
    return(
@@ -175,7 +162,7 @@ function uniq_fast(a) {
                     <S.CenterblockFilter  >
                         <S.FilterTitle style={{color: theme.color}}>Искать по:</S.FilterTitle>
                         <Dropdown id="nameid" name="Исполнителю" typeFilter='author' content={uniq_fast(author).sort()}/>
-                        <Dropdown id="year" name="Году выпуска" typeFilter='date' content={uniq_fast(date).sort()}/>
+                        {/* <Dropdown id="year" name="Году выпуска" typeFilter='date' content={uniq_fast(date).sort()}/> */}
                         <Dropdown id="genre" name="Жанру" typeFilter='genre' content={uniq_fast(genre).sort()}/>
                     </S.CenterblockFilter>
 
@@ -193,7 +180,7 @@ function uniq_fast(a) {
                         </S.ContentTitle>
                         <S.ContentPlaylist >
                            {
-                              Gdata?.map((el, index) => (
+                              filtersTrack?.map((el, index) => (
                                  <PlaylistItem loading={loading} playTrack={playTrack} trackUrl={el} stared_user={el.stared_user} id={el.id} name={el.name} author={el.author} album={el.album} duration_in_seconds={el.duration_in_seconds} />
                               ))
                             }
