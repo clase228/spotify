@@ -181,7 +181,7 @@ function uniq_fast(a) {
                         <S.ContentPlaylist >
                            {
                               filtersTrack?.map((el, index) => (
-                                 <PlaylistItem loading={loading} playTrack={playTrack} trackUrl={el} stared_user={el.stared_user} id={el.id} name={el.name} author={el.author} album={el.album} duration_in_seconds={el.duration_in_seconds} />
+                                 <PlaylistItem loading={loading} playTrack={playTrack} trackUrl={el} stared_user={el.stared_user} id={el.id} name={el.name} author={el.author} album={el.album} duration_in_seconds={el.duration_in_seconds} user_id={auth_data.user_id} token={auth_data.access} />
                               ))
                             }
                         </S.ContentPlaylist>                        

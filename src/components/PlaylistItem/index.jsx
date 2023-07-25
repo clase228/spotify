@@ -4,10 +4,7 @@ import { authSelector } from "../../store/selectors/auth"
 import iconSprite from "../../img/icon/sprite.svg";
 import { useThemeContext } from "../../context/theme";
 import { useLikeTrackMutation,useUnLikeTrackMutation } from "../../services/tracks";
-export function PlaylistItem ({loading,playTrack,trackUrl,stared_user,id,name,author,album,duration_in_seconds,}){
-   
-
-
+export function PlaylistItem ({loading,playTrack,trackUrl,stared_user,id,name,author,album,duration_in_seconds,user_id,token}){
    const {theme} = useThemeContext()
 
 
@@ -38,21 +35,21 @@ export function PlaylistItem ({loading,playTrack,trackUrl,stared_user,id,name,au
    }
    let secondsConvert = countDigits(seconds) === 2 ? seconds : '0' + seconds 
    function handleToggleLike(id) {
-      LikeTrack({id, authorization: `${auth_data.access}`})
+      LikeTrack({id, authorization: `${token}`})
    }
    function handleToggUnleLike(id) {
-      UnLikeTrack({id, authorization: `${auth_data.access}`})
+      UnLikeTrack({id, authorization: `${token}`})
    }
    let isLiked
-   // for (let i = 0; i < stared_user.length; i++) {
-   //    if (stared_user[i].id === auth_data.user_id) {
-   //       isLiked=true
-   //       break;
-   //    }else{
-   //       isLiked=false
-   //    }
+   for (let i = 0; i < stared_user.length; i++) {
+      if (stared_user[i].id === user_id) {
+         isLiked=true
+         break;
+      }else{
+         isLiked=false
+      }
       
-   // }
+   }
  
    return (
       <S.PlaylistItem id={id}  onMouseEnter={(event) => handleMouseEnter(event,id)} onMouseLeave={(event) =>handleMouseLeave(event,id)}>

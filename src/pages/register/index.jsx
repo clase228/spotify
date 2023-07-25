@@ -13,7 +13,7 @@ import {
   update_userInfo,
 } from "../../store/actions/creators/auth";
 
-export const Register = () => {
+export function Register (testusername,testemail,testpassword) {
   const [RegisterUser, { error, status }] = useRegisterUserMutation();
   const [loginUser, test] = useLoginUserMutation();
   const [GetToken, { data }] = useGetTokenMutation();
@@ -67,6 +67,7 @@ export const Register = () => {
         <S.LoginInputWrapper>
           <S.LoginInput
             placeholder="Имя"
+            value={testusername}
             onInput={(event) => setusername(event.target.value)}
           />
           {error?.data.username && (
@@ -77,6 +78,7 @@ export const Register = () => {
           <S.LoginInput
             placeholder="Почта"
             type="email"
+            value={testemail}
             required
             onInput={(event) => setLogin(event.target.value)}
           />
@@ -86,8 +88,9 @@ export const Register = () => {
         </S.LoginInputWrapper>
         <S.LoginInputWrapper>
           <S.LoginInput
-            placeholder="Повторите пароль"
+            placeholder="Повторите"
             type="password"
+            value={testpassword}
             onInput={(event) => setPassword(event.target.value)}
           />
           {error?.data.password && (
@@ -95,7 +98,7 @@ export const Register = () => {
           )}
         </S.LoginInputWrapper>
         <S.LoginInputWrapper margined={true}>
-          <S.LoginInput name="password" placeholder="Пароль" type="password" />
+          <S.LoginInput name="password" placeholder="Повторите пароль" type="password" value={testpassword}/>
         </S.LoginInputWrapper>
 
         <S.LoginBtn onClick={handleLoginUser}>Зарегистрироваться</S.LoginBtn>

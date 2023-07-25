@@ -2,26 +2,15 @@
 import { useThemeContext } from "../../context/theme"
 
 import * as S from './styles'
-import { Link } from "react-router-dom" 
+
 import { useEffect } from "react"
 import { authSelector } from "../../store/selectors/auth"
 import { useSelector } from "react-redux";
 import { useGetCatalogQuery } from "../../services/catalog" 
+import { SidebarItem } from "../SidebarItem"
 function MainSidebar(props) {
    const {data, isLoading} = useGetCatalogQuery()
    const auth_data = useSelector(authSelector);
-   function SidebarItem(prop) {
-      return (
-         <S.SidebarItem >
-              <Link to={`/main/` + prop.plnumber} >
-               <S.ImgLoad>
-                  <S.ImgLoadText>
-                     {prop.text}
-                  </S.ImgLoadText>
-               </S.ImgLoad>
-              </Link>
-          </S.SidebarItem>
-   )}
    const {theme} = useThemeContext()
    return (
       <S.MainSidebar style={{background: theme.background}}>
@@ -31,7 +20,6 @@ function MainSidebar(props) {
       </S.SidebarPersonal>
       <S.SidebarBlock>
           <S.SidebarList>
-            
             {data?.map((el, index) => (
                <SidebarItem plnumber={index + 1} text={el.items[0].genre} />
             ))}

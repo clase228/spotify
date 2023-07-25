@@ -13,7 +13,6 @@ function Bar({trackUrl,isPlay,playTrackButton}){
    const handelOnOffTrack = () =>{
       if(!isPlay){
          playTrackButton()
-        console.log(audioRef.current);
         audioRef.current.play()
          currentTimeInterval = setInterval(() => {
             currentTimeAudio.current.style.width = audioRef.current.currentTime / audioRef.current.duration * 100 + '%'

@@ -1,12 +1,15 @@
 import React from "react";
 import { setupApiStore } from "../tests-utils";
 import { PlaylistItem } from "./PlaylistItem"; 
+import { SidebarItem } from "./SidebarItem";
 import { fireEvent, render, screen } from "@testing-library/react";
 import { rest } from "msw";
 import { setupServer } from "msw/node";
 import { tracksApi } from "../services/tracks";
-import { loginApi } from "../services/login";
+import { authApi } from "../services/login";
 import { Login } from "../pages/login";
+import { Register } from "../pages/register";
+import { Router,Routes, Route,MemoryRouter } from "react-router-dom"; 
 const constant = {
    "id": 33,
    "name": "Classical Metal Workout",
@@ -134,7 +137,7 @@ const server = setupServer(...handlers);
 
 // Мокируем api store
 const storeRef = setupApiStore(tracksApi);
-const loginRef = setupApiStore(loginApi);
+const loginRef = setupApiStore(authApi);
 
 describe("Tracks feature", () => {
   beforeAll(() => server.listen());
@@ -142,39 +145,63 @@ describe("Tracks feature", () => {
   afterAll(() => server.close());
 
   it("should show requested data", async () => {
-    render(<PlaylistItem  trackUrl={constant} stared_user={constant.stared_user} id={constant.id} name={constant.name} author={constant.author} album={constant.album} duration_in_seconds={constant.duration_in_seconds} />, { wrapper: storeRef.wrapper });
+    render(<PlaylistItem  trackUrl={constant} stared_user={constant.stared_user} id={constant.id} name={constant.name} author={constant.author} album={constant.album} duration_in_seconds={constant.duration_in_seconds} user_id={789} />, { wrapper: storeRef.wrapper });
     expect(await screen.findByText(/Classical Metal Workout/i)).toBeInTheDocument();
   });
+   it("should show requested catalog", async () => {
+    render(<SidebarItem plnumber={1} text={constant.genre} /> , { wrapper: storeRef.wrapper });
+    expect(await screen.findByText(/Рок музыка/i)).toBeInTheDocument();
+  })
 
 
- it("should update todo item by click", async () => {
-   render(<Login email='glo50' password='qwe123123'/>, { wrapper: loginRef.wrapper });
-
+ it("should login", async () => {
+   render(
+      <MemoryRouter>
+        <Login email='glo40@mail.ru' password='qwe123123'/>
+      </MemoryRouter>,{ wrapper: loginRef.wrapper }
+    )
    fireEvent.click(await screen.findByText("Войти"));
-
+   await render(<PlaylistItem  trackUrl={constant} stared_user={constant.stared_user} id={constant.id} name={constant.name} author={constant.author} album={constant.album} duration_in_seconds={constant.duration_in_seconds} />, { wrapper: storeRef.wrapper })
    server.use(
      rest.post('https://painassasin.online/user/login/', (req, res, ctx) => {
        return res(
-         ctx.json([{ completed: true, id: "1", title: "My first todo" }])
+         ctx.json([{"id": 789,"username": "glo40","first_name": "","last_name": "","email": "glo40@mail.ru"}])
        );
      })
    );
 
    expect(await screen.findByText("Classical Metal Workout")).toBeInTheDocument();
  });
-//  it("should update todo item by click", async () => {
-//    render(<PlaylistItem  trackUrl={constant} stared_user={constant.stared_user} id={constant.id} name={constant.name} author={constant.author} album={constant.album} duration_in_seconds={constant.duration_in_seconds} />, { wrapper: storeRef.wrapper });
+ it("should register", async () => {
+   render(
+      <MemoryRouter>
+        <Register username='glo40' email='glo40@mail.ru' password='qwe123123'/>
+      </MemoryRouter>,{ wrapper: loginRef.wrapper }
+    )
+   fireEvent.click(await screen.findByText("Зарегистрироваться"));
+   await render(<PlaylistItem  trackUrl={constant} stared_user={constant.stared_user} id={constant.id} name={constant.name} author={constant.author} album={constant.album} duration_in_seconds={constant.duration_in_seconds} />, { wrapper: storeRef.wrapper })
+   server.use(
+     rest.post('https://painassasin.online/user/login/', (req, res, ctx) => {
+       return res(
+         ctx.json([{"id": 789,"username": "glo40","first_name": "","last_name": "","email": "glo40@mail.ru"}])
+       );
+     })
+   );
 
-//    fireEvent.click(await screen.getByRole("svgHeart"));
+   expect(await screen.findByText("Classical Metal Workout")).toBeInTheDocument();
+ });
+;
+  it("should update todo item by click", async () => {
+    render(<PlaylistItem  trackUrl={constant} stared_user={constant.stared_user} id={constant.id} name={constant.name} author={constant.author} album={constant.album} duration_in_seconds={constant.duration_in_seconds} />, { wrapper: storeRef.wrapper });
+    fireEvent.click(await screen.findByRole("svgHeart"));
 
-//    server.use(
-//      rest.post('https://painassasin.online/catalog/track/33/favorite/', (req, res, ctx) => {
-//        return res(
-//          ctx.json([{ completed: true, id: "1", title: "My first todo" }])
-//        );
-//      })
-//    );
-
-//    expect(await screen.findByText("Classical Metal Workout")).toBeInTheDocument();
-//  });
+    server.use(
+      rest.post('https://painassasin.online/catalog/track/33/favorite/', (req, res, ctx) => {
+        return res(
+          ctx.json(['trak is added'])
+        );
+      })
+    );
+    expect(await screen.findByText("Classical Metal Workout")).toBeInTheDocument();
+  });
 });
