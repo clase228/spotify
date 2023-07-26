@@ -1,5 +1,5 @@
 import iconSprite from "../../img/icon/sprite.svg";
-import  { useState,useEffect } from 'react';
+import  { useState } from 'react';
 import { useParams } from "react-router-dom";
 import * as S from './styles'
 import { useThemeContext } from "../../context/theme";
@@ -8,11 +8,12 @@ import { useGetCatalogQuery } from "../../services/catalog"
 import { useSelector } from "react-redux";
 import { authSelector } from "../../store/selectors/auth"
 import { PlaylistItem } from "../PlaylistItem";
+import { Dropdown } from "../dropdown";
 function MainCenterblock({playTrack,loading}) {
    
    let namePlaylist
    let Gdata;
-   let GisLoading;
+   // let GisLoading;
  
    const auth_data = useSelector(authSelector);
    const params = useParams()
@@ -40,16 +41,9 @@ function MainCenterblock({playTrack,loading}) {
       })
    }
    
-const [visibleFilter, setVisibleFilter] = useState(null);
-let startGdata = Gdata
-let filterAuthor = [];
-let filterDate=[]
-let filterGenre=[]
 
-const toggleVisibleFilter = (filter) => {
-  setVisibleFilter(visibleFilter === filter ? null : filter);
-};
-const [activeElement, setActiveElement] = useState(null);
+
+
 const [selectedFilters, setSelectedFilter] = useState({genres: [], authors: []}) 
 const filtersTrack = Gdata?.filter((track) => {
    const isGenreMatched = !selectedFilters.genres.length || selectedFilters.genres.includes(track.genre);
@@ -57,12 +51,12 @@ const filtersTrack = Gdata?.filter((track) => {
  
    return isGenreMatched && isAuthorMatched;
 }) 
-console.log(filtersTrack);
 const handleAddGenreFilter = (genre,elem) => {
    setSelectedFilter((prevFilters) => {
      const isGenreAlreadySelected = prevFilters.genres.includes(genre);
 
      if (isGenreAlreadySelected) {
+      elem.target.classList.remove('active')
        const updatedGenres = prevFilters.genres.filter((existingGenre) => existingGenre !== genre);
        return {
          ...prevFilters,
@@ -85,6 +79,7 @@ const handleAddGenreFilter = (genre,elem) => {
         const isAuthorAlreadySelected = prevFilters.authors.includes(author);
   
         if (isAuthorAlreadySelected) {
+           elem.target.classList.remove('active')
           const updatedAuthors = prevFilters.authors.filter((existingAuthor) => existingAuthor !== author);
           return {
             ...prevFilters,
@@ -102,31 +97,12 @@ const handleAddGenreFilter = (genre,elem) => {
     };
 
 
-console.log(selectedFilters);
-
 
 const {theme} = useThemeContext()
-function Dropdown(props) {
-   const res = []
-
-   props.content.map(el => {
-      res.push(<S.DropdownList style={{color:theme.color}} className={activeElement === el ? 'active' : ''} onClick={props.typeFilter === 'author' ? (e)=>handleAddAuthorFilter(el,e):(e)=>handleAddGenreFilter(el,e)}>{el}</S.DropdownList>
-      )
-   })
-   return(
-      <S.Dropdown >
-         <S.FilterButton style={{color:visibleFilter === props.id ? '#ad61ff' : theme.color,borderColor: visibleFilter === props.id ? '#ad61ff' : theme.borderColor}}   onClick={() => toggleVisibleFilter(props.id)} >{props.name}</S.FilterButton>
-         {visibleFilter === props.id && 
-         <S.DropdownWrapper style={{background: theme.bgDropdown}}  >
-         <S.DropdownMenu scrollbar={theme.scrollbar} scrollbarInner={theme.scrollbarInner}>{res}</S.DropdownMenu>
-      </S.DropdownWrapper>} 
-   </S.Dropdown>
-   )
-}
-let author = []
-let genre = []
-let date = []
-Gdata?.forEach(el=>{
+let author =[]
+let genre =[]
+let date =[]
+Gdata?.forEach((el)=>{
    author.push(el.author)
    genre.push(el.genre)
    let str = el.release_date
@@ -149,6 +125,10 @@ function uniq_fast(a) {
    }
    return out;
 }
+const [visibleFilter, setVisibleFilter] = useState(null);
+   const toggleVisibleFilter = (filter) => {
+     setVisibleFilter(visibleFilter === filter ? null : filter);
+   };
    return (
       
       <S.MainCenterblock style={{background: theme.background}}  >
@@ -161,9 +141,9 @@ function uniq_fast(a) {
                     <S.CenterblockH2 style={{color: theme.color}}>{namePlaylist}</S.CenterblockH2>
                     <S.CenterblockFilter  >
                         <S.FilterTitle style={{color: theme.color}}>Искать по:</S.FilterTitle>
-                        <Dropdown id="nameid" name="Исполнителю" typeFilter='author' content={uniq_fast(author).sort()}/>
+                        <Dropdown id="nameid" name="Исполнителю" typeFilter='author' handleAddAuthorFilter={handleAddAuthorFilter} handleAddGenreFilter={handleAddGenreFilter} toggleVisibleFilter={toggleVisibleFilter} visibleFilter={visibleFilter} content={uniq_fast(author).sort()}/>
+                        <Dropdown id="genre" name="Жанру" typeFilter='genre' handleAddGenreFilter={handleAddGenreFilter} handleAddAuthorFilter={handleAddAuthorFilter}  toggleVisibleFilter={toggleVisibleFilter} visibleFilter={visibleFilter} content={uniq_fast(genre).sort()}/>
                         {/* <Dropdown id="year" name="Году выпуска" typeFilter='date' content={uniq_fast(date).sort()}/> */}
-                        <Dropdown id="genre" name="Жанру" typeFilter='genre' content={uniq_fast(genre).sort()}/>
                     </S.CenterblockFilter>
 
                     <S.CenterblockContent >

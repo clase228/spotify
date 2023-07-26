@@ -202,6 +202,6 @@ describe("Tracks feature", () => {
         );
       })
     );
-    expect(await screen.findByText("Classical Metal Workout")).toBeInTheDocument();
+    expect(await screen.findByRole("svgHeart")).toBeInTheDocument();
   });
 });

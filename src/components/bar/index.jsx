@@ -4,24 +4,34 @@ import * as S from './styles'
 import { useState, useRef,useEffect } from "react";
 import { useThemeContext } from "../../context/theme";
 
-function Bar({trackUrl,isPlay,playTrackButton}){
-   console.log(isPlay);
+function Bar({trackUrl}){
+   const [isPlay, setIsplay] = useState(false);
+   
    const audioRef = useRef(null)
    const currentTimeAudio = useRef(null)
    let currentTimeInterval;
    clearInterval(currentTimeInterval)
-   const handelOnOffTrack = () =>{
-      if(!isPlay){
-         playTrackButton()
+   useEffect(()=>{
+      playFunc()
+   },[trackUrl])
+   function playFunc(params) {
+      setIsplay(true)
         audioRef.current.play()
          currentTimeInterval = setInterval(() => {
             currentTimeAudio.current.style.width = audioRef.current.currentTime / audioRef.current.duration * 100 + '%'
          }, 1);
+   }
+   const handelOnOffTrack = () =>{
+      if(isPlay === false){
+         playFunc()
       }else{
+         setIsplay(false)
          clearInterval(currentTimeInterval)
-         playTrackButton()
          audioRef.current.pause()
       }
+   }
+   function changeVolume(volume) {
+      audioRef.current.volume = volume.target.value
    }
    const {theme} = useThemeContext()
  return (
@@ -97,7 +107,7 @@ function Bar({trackUrl,isPlay,playTrackButton}){
                                     </S.VolumeSvg>
                                 </S.VolumeImage>
                                 <S.VolumeProgress className=" _btn">
-                                    <S.VolumeProgressLine className=" _btn" type="range" name="range"/>
+                                    <S.VolumeProgressLine min='0' max='1' step='0.01' onInput={(e) =>changeVolume(e)} className=" _btn" type="range" name="range"/>
                                 </S.VolumeProgress>
                                 
                            </S.VolumeContent>
