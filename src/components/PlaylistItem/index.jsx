@@ -41,14 +41,18 @@ export function PlaylistItem ({loading,playTrack,trackUrl,stared_user,id,name,au
       UnLikeTrack({id, authorization: `${token}`})
    }
    let isLiked
-   for (let i = 0; i < stared_user.length; i++) {
-      if (stared_user[i].id === user_id) {
-         isLiked=true
-         break;
-      }else{
-         isLiked=false
+   console.log(stared_user);
+   if(stared_user !== undefined){
+      for (let i = 0; i < stared_user.length; i++) {
+         if (stared_user[i].id === user_id) {
+            isLiked=true
+            break;
+         }else{
+            isLiked=false
+         }
+         
       }
-      
+
    }
  
    return (
