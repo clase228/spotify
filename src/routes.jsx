@@ -11,9 +11,9 @@ export const AppRoutes = () => {
       <Route path="/" element={<Login />} />
       <Route path="/register" element={<Register />} />
 
-         <Route path="/main/:id"  element={<Main />} />
       <Route element={<ProtectedRoute/>}>
- 
+         <Route path="/main/*"  element={<Main />} />
+         <Route path="/main/:id"  element={<Main />} />
       </Route>
 
       <Route path="*" element={<NotFound />} />

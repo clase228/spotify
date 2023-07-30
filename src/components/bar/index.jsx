@@ -3,6 +3,7 @@ import iconSprite from "../../img/icon/sprite.svg";
 import * as S from './styles'
 import { useState, useRef,useEffect } from "react";
 import { useThemeContext } from "../../context/theme";
+import { logDOM } from "@testing-library/react";
 
 function Bar({trackUrl,playTrackNext,playTrackPrev,isNoTrack}){
    const [isPlay, setIsplay] = useState(false);
@@ -19,19 +20,28 @@ function Bar({trackUrl,playTrackNext,playTrackPrev,isNoTrack}){
    },[trackUrl])
  
    function playFunc(params) {
-      setIsplay(true)
-        audioRef.current.play()
-         currentTimeInterval = setInterval(() => {
-            currentTimeAudio.current.style.width = audioRef.current.currentTime / audioRef.current.duration * 100 + '%'
-
-            if (audioRef.current.currentTime === audioRef.current.duration && isRepeat === true  && isShuffle === false) {
-               audioRef.current.pause()
-               audioRef.current.currentTime = 0;
-               audioRef.current.play()
-            }else if (audioRef.current.currentTime === audioRef.current.duration && isRepeat === false && isShuffle === false){
-               handleNextTrack()
-            }
-         }, 1);    
+      if (trackUrl) {
+         
+         setIsplay(true)
+         if (audioRef) {
+            console.log(123);
+            audioRef.current.play()
+         }
+            currentTimeInterval = setInterval(() => {
+               if (currentTimeAudio.current && audioRef.current) {
+                  
+                  currentTimeAudio.current.style.width = audioRef.current.currentTime / audioRef.current.duration * 100 + '%'
+      
+                  if (audioRef.current.currentTime === audioRef.current.duration && isRepeat === true  && isShuffle === false) {
+                     audioRef.current.pause()
+                     audioRef.current.currentTime = 0;
+                     audioRef.current.play()
+                  }else if (audioRef.current.currentTime === audioRef.current.duration && isRepeat === false && isShuffle === false){
+                     handleNextTrack()
+                  }
+               }
+            }, 1);    
+      }
    }
    function handleNextTrack(){
       whitchTrackPlay('next')
