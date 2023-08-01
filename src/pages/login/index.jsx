@@ -8,7 +8,7 @@ import {
    update_token,
    update_userInfo,
  } from "../../store/actions/creators/auth";
-export function Login ({testemail,testpassword})  {
+export function Login ()  {
    const [GetToken, {data: getTokenData}] = useGetTokenMutation();
    const [loginUser, {error,status,data}] = useLoginUserMutation();
    const [email, setEmail] = useState('');
@@ -54,13 +54,13 @@ export function Login ({testemail,testpassword})  {
       <S.LoginWrapper>
          <S.Logo src={Logo} alt='logo'/>
          <S.LoginInputWrapper>
-            <S.LoginInput name='login' placeholder="Email" value={testemail} onInput={(event) => setEmail(event.target.value)}/>
+            <S.LoginInput name='login' placeholder="Email"  onInput={(event) => setEmail(event.target.value)}/>
              {error?.data.email && (
             <S.ErrorMessage>{error.data.email}</S.ErrorMessage>
           )}
          </S.LoginInputWrapper>
          <S.LoginInputWrapper>
-            <S.LoginInput margined={true} name='password' value={testpassword} placeholder="Пароль" type="password" onInput={(event) => setPassword(event.target.value)}/>
+            <S.LoginInput margined={true} name='password'  placeholder="Пароль" type="password" onInput={(event) => setPassword(event.target.value)}/>
              {error?.data.password && (
             <S.ErrorMessage>{error.data.password}</S.ErrorMessage>
           )}

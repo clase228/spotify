@@ -90,7 +90,7 @@ function Bar({trackUrl,playTrackNext,playTrackPrev,isNoTrack}){
       audioRef.current.currentTime = ((event.pageX / window.innerWidth * 100) / 100) * audioRef.current.duration
    }
  return (
-   <S.Bar style={{background: theme.background},isNoTrack?{display:'block'}:{display:'none'}}>
+   <S.Bar style={{ background: theme.background, ...(isNoTrack ? { display: 'block' } : { display: 'none' }) }}>
                 <S.BarContent >
                     <S.BarPlayerProgress onMouseLeave={(e)=>handleUnHoverBar(e)}  onMouseMove={(e)=>handleHoverBar(e)} onClick={(e)=>changeSec(e)} style={{background: theme.progresBarElement}}>
                         <S.BarTrackSec ref={hoverTimeAudio}>0:14</S.BarTrackSec>
