@@ -1,89 +1,125 @@
 import iconSprite from "../../img/icon/sprite.svg";
 import  { useState } from 'react';
-import { useParams } from "react-router-dom";
 import * as S from './styles'
-import {Playlist} from '../../constants'
-import {nameOfPlaylist} from '../../constants'
 import { useThemeContext } from "../../context/theme";
- function MainCenterblock(props) {
-   const params = useParams()
-   const playlist = Playlist.filter((item) => item.playlist === params.id);   
-   const namePlaylist = nameOfPlaylist.filter((item) => item.playlist === params.id);
+import { useSelector } from "react-redux";
+import { authSelector } from "../../store/selectors/auth"
+import { PlaylistItem } from "../PlaylistItem";
+import { Dropdown } from "../dropdown";
+function MainCenterblock({playTrack,loading,Gdata,namePlaylist}) {
+   
+   
 
-   function PlaylistItem (prop){
-      
-      return (
-         <S.PlaylistItem >
-             <S.PlaylistTrack >
-                 <S.TrackTitle >
-                     <S.TrackTitleImage  style={{background:theme.backgroundTrack}}>
-                         <S.TrackTitleSvg  alt="music">
-                             <use href={props.loading ? (<div/>) : (theme.color === '#fff' ? iconSprite + '#icon-note' : iconSprite + '#icon-note-light')}></use>
-                         </S.TrackTitleSvg>
-                     </S.TrackTitleImage>
-                     <div>
-                         <S.TrackTitleLink style={{color:theme.color}} href="http://">{props.loading ? (<S.NameIdLoad/>) : prop.nameid }<S.TrackTitleSpan>{props.loading ? (<div/>) : prop.title }</S.TrackTitleSpan></S.TrackTitleLink>
-                     </div>
-                 </S.TrackTitle>
-                 <S.TrackAuthor >
-                     <S.TrackAuthorLink style={{color:theme.color}}  href="http://">{props.loading ? (<S.AuthorLoad />) : prop.author }</S.TrackAuthorLink>
-                 </S.TrackAuthor>
-                 <S.TrackAlbum >
-                     <S.TrackAlbumLink style={{color:theme.color}}  href="http://">{props.loading ? (<S.AlbumLoad />) : prop.album }</S.TrackAlbumLink>
-                 </S.TrackAlbum>
-                 <div >
-                     <S.TrackTimeSvg alt="time">
-                         <use href={iconSprite + '#icon-like'}></use>
-                     </S.TrackTimeSvg>
-                     <S.TrackTimeText >{props.loading ? (<div/>) : prop.time }</S.TrackTimeText>
-                 </div>
-             </S.PlaylistTrack>
-         </S.PlaylistItem>
-      );
-   }
+   const auth_data = useSelector(authSelector);
+   const forLoad = ['1','2','3','1','2','3','1','2','3']
 
-// По умолчанию у нас ничего не видно
-const [visibleFilter, setVisibleFilter] = useState(null);
 
-const toggleVisibleFilter = (filter) => {
-  // если состояние visibleFilter равен значению filter
-  // это значит, что мы нажали на тот же фильтр, скрываем блок
-  setVisibleFilter(visibleFilter === filter ? null : filter);
-};
-const {theme} = useThemeContext()
-function Dropdown(props) {
-   const res = []
+   
+const [selectedFilters, setSelectedFilter] = useState({genres: [], authors: [],additionalFilter: '', }) 
+const filtersTrack = Gdata?.filter((track) => {
+   const isGenreMatched = !selectedFilters.genres.length || selectedFilters.genres.includes(track.genre);
+   const isAuthorMatched = !selectedFilters.authors.length || selectedFilters.authors.includes(track.author);
+   
+   const isAdditionalFilterMatched = !selectedFilters.additionalFilter || Object.values(track).some(value =>
+      value !== null && value !== undefined && value.toString().toLowerCase().includes(selectedFilters.additionalFilter.toLowerCase())
+    );
 
-   props.content.forEach(el => {
-      res.push(
-      <S.DropdownList style={{color:theme.color}}>{el}</S.DropdownList>
-      )
-   })
-   return(
-      <S.Dropdown >
-         <S.FilterButton style={{color:visibleFilter === props.id ? '#ad61ff' : theme.color,borderColor: visibleFilter === props.id ? '#ad61ff' : theme.borderColor}}   onClick={() => toggleVisibleFilter(props.id)} >{props.name}</S.FilterButton>
-         {visibleFilter === props.id && 
-         <S.DropdownWrapper style={{background: theme.bgDropdown}}  >
-         <S.DropdownMenu scrollbar={theme.scrollbar} scrollbarInner={theme.scrollbarInner}>{res}</S.DropdownMenu>
-      </S.DropdownWrapper>} 
-   </S.Dropdown>
-   )
+    return isGenreMatched && isAuthorMatched && isAdditionalFilterMatched;
+}) 
+const handleAddGenreFilter = (genre,elem) => {
+   setSelectedFilter((prevFilters) => {
+     const isGenreAlreadySelected = prevFilters.genres.includes(genre);
+
+     if (isGenreAlreadySelected) {
+      elem.target.classList.remove('active')
+       const updatedGenres = prevFilters.genres.filter((existingGenre) => existingGenre !== genre);
+       return {
+         ...prevFilters,
+         genres: updatedGenres,
+       };
+     } else {
+      elem.target.classList.add('active')
+       return {
+         ...prevFilters,
+         genres: [...prevFilters.genres, genre],
+       };
+     }
+   });
 }
+const handleAddAuthorFilter = (author,elem) => {
+      setSelectedFilter((prevFilters) => {
+        const isAuthorAlreadySelected = prevFilters.authors.includes(author);
+  
+        if (isAuthorAlreadySelected) {
+           elem.target.classList.remove('active')
+          const updatedAuthors = prevFilters.authors.filter((existingAuthor) => existingAuthor !== author);
+          return {
+            ...prevFilters,
+            authors: updatedAuthors,
+          };
+        } else {
+         elem.target.classList.add('active')
+          return {
 
+            ...prevFilters,
+            authors: [...prevFilters.authors, author],
+          };
+        }
+      });
+};
+const handleInputChange = (event) => {
+   setSelectedFilter({
+     ...selectedFilters,
+     additionalFilter: event.target.value, // Обновляем состояние при вводе текста в input
+   });
+ };
+const {theme} = useThemeContext()
+let author =[]
+let genre =[]
+let date =[]
+Gdata?.forEach((el)=>{
+   author.push(el.author)
+   genre.push(el.genre)
+   let str = el.release_date
+   if (typeof str === 'string') {
+      date.push(str.substr(0, str.length - 6))
+   }
+   
+})
+
+function uniq_fast(a) {
+   var seen = {};
+   var out = [];
+   var len = a.length;
+   var j = 0;
+   for(var i = 0; i < len; i++) {
+        var item = a[i];
+        if(seen[item] !== 1) {
+              seen[item] = 1;
+              out[j++] = item;
+        }
+   }
+   return out;
+}
+const [visibleFilter, setVisibleFilter] = useState(null);
+   const toggleVisibleFilter = (filter) => {
+     setVisibleFilter(visibleFilter === filter ? null : filter);
+   };
    return (
-      <S.MainCenterblock style={{background: theme.background}}>
+      
+      <S.MainCenterblock style={{background: theme.background}}  >
                     <S.CenterblockSearch >
                         <S.SearchSvg >
                             <use href={theme.color === '#fff' ? iconSprite + '#icon-search-dark'  :iconSprite + '#icon-search-light'}></use>
                         </S.SearchSvg>
-                        <S.SearchText style={{color: theme.color}} color={theme.color} type="search" placeholder="Поиск" name="search" />
+                        <S.SearchText style={{color: theme.color}} color={theme.color} type="search" placeholder="Поиск" name="search" value={selectedFilters.additionalFilter} onInput={handleInputChange} />
                     </S.CenterblockSearch>
-                    <S.CenterblockH2 style={{color: theme.color}}>{namePlaylist.length === 0 ? 'Треки' : namePlaylist[0].name}</S.CenterblockH2>
+                    <S.CenterblockH2 style={{color: theme.color}}>{namePlaylist}</S.CenterblockH2>
                     <S.CenterblockFilter  >
                         <S.FilterTitle style={{color: theme.color}}>Искать по:</S.FilterTitle>
-                        <Dropdown id="nameid" name="Исполнителю" content={['Michael Jackson', 'Frank Sinatra', 'Calvin Harris', 'Arctic Monkeys', 'Zhu', 'Michael Jackson', 'Frank Sinatra', 'Calvin Harris', 'Arctic Monkeys', 'Zhu', 'Michael Jackson', 'Frank Sinatra', 'Calvin Harris', 'Arctic Monkeys', 'Zhu']}/>
-                        <Dropdown id="year" name="Году выпуска" content={['Michael Jackson', 'Frank Sinatra', 'Calvin Harris', 'Arctic Monkeys', 'Zhu', 'Michael Jackson', 'Frank Sinatra', 'Calvin Harris', 'Arctic Monkeys', 'Zhu', 'Michael Jackson', 'Frank Sinatra', 'Calvin Harris', 'Arctic Monkeys', 'Zhu']}/>
-                        <Dropdown id="genre" name="Жанру" content={['Michael Jackson', 'Frank Sinatra', 'Calvin Harris', 'Arctic Monkeys', 'Zhu', 'Michael Jackson', 'Frank Sinatra', 'Calvin Harris', 'Arctic Monkeys', 'Zhu', 'Michael Jackson', 'Frank Sinatra', 'Calvin Harris', 'Arctic Monkeys', 'Zhu']}/>
+                        <Dropdown id="nameid" name="Исполнителю" typeFilter='author' handleAddAuthorFilter={handleAddAuthorFilter} handleAddGenreFilter={handleAddGenreFilter} toggleVisibleFilter={toggleVisibleFilter} visibleFilter={visibleFilter} content={uniq_fast(author).sort()}/>
+                        <Dropdown id="genre" name="Жанру" typeFilter='genre' handleAddGenreFilter={handleAddGenreFilter} handleAddAuthorFilter={handleAddAuthorFilter}  toggleVisibleFilter={toggleVisibleFilter} visibleFilter={visibleFilter} content={uniq_fast(genre).sort()}/>
+                        {/* <Dropdown id="year" name="Году выпуска" typeFilter='date' content={uniq_fast(date).sort()}/> */}
                     </S.CenterblockFilter>
 
                     <S.CenterblockContent >
@@ -97,15 +133,14 @@ function Dropdown(props) {
                                     <use href={iconSprite + '#icon-watch'}></use>
                                 </S.PlaylistTitleSvg>
                             </S.col04>
+               
                         </S.ContentTitle>
-                        
-                      
-   
- 
-                        <S.ContentPlaylist >
-                           {playlist.map((el, index) => (
-                              <PlaylistItem nameid={el.nameid} author={el.author} album={el.album} time={el.time} />
-                           ))}
+                        <S.ContentPlaylist scrollbar={theme.scrollbar} scrollbarInnerMain={theme.scrollbarInnerMain}>
+                           {loading ? forLoad.map((el)=>(<PlaylistItem loading={loading}/>)) :filtersTrack?.map((el, index) => (
+                                 <PlaylistItem  playTrack={playTrack} trackUrl={el} stared_user={el.stared_user} id={el.id} name={el.name} author={el.author} album={el.album} duration_in_seconds={el.duration_in_seconds} user_id={auth_data.user_id} token={auth_data.access} />
+                              ))
+                           
+                            }
                         </S.ContentPlaylist>                        
                     </S.CenterblockContent>
                 </S.MainCenterblock>

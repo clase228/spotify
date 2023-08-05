@@ -1,12 +1,6 @@
 import styled from "styled-components";
 
-export const SidebarItem = styled.div`
-   width: 250px;
-   height: 150px;
-   &:not(:last-child) {
-      margin-bottom: 30px;
-    }
-`
+
 export const SidebarPersonal = styled.div`
    display: flex;
    flex-direction: row;
@@ -52,12 +46,6 @@ export const MainSidebar = styled.div`
    max-width: 418px;
    padding: 20px 90px 20px 78px;
 `
-export const ImgLoad = styled.div`
-position: absolute;
-width: 250px;
-height: 150px;
-background: #313131;
-` 
 
 
 

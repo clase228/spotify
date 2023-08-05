@@ -77,7 +77,7 @@ export const TrackPlaySvg = styled.svg`
 `
 export const TrackPlayAuthor = styled.div`
 grid-area: author;
-min-width: 49px;
+   width: auto;
 `
 export const TrackPlayAuthorLink = styled.a`
 font-style: normal;
@@ -89,7 +89,7 @@ font-style: normal;
 `
 export const TrackPlayAlbum = styled.div`
    grid-area: album;
-   min-width: 49px;
+      width: auto;
 `
 export const TrackPlayAlbumLink = styled.a`
    font-style: normal;
@@ -208,6 +208,31 @@ background: #313131;
 `
 export const HiddenAudio = styled.audio`
   display:none;
+`;
+export const BarTrackSec = styled.div`
+background: #000;
+position: absolute;
+border: 1px solid rgba(0, 0, 0, 0.15);
+width: 48px;
+z-index: 100;
+height: 30px;
+display: flex;
+justify-content: center;
+align-items: center;
+top: -38px;
+left: 50px;
+border-radius: 6px;
+&::after{
+   content:'';
+   position:absolute;
+   content: "";
+   position: absolute;
+   top: 29px;
+   width: 5px;
+   height: 5px;
+   border: 6px solid transparent;
+   border-top: 6px solid #000;
+}
 `;
 
 

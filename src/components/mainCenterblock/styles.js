@@ -104,6 +104,18 @@ export const ContentPlaylist = styled.div`
   display: flex;
   flex-direction: column;
   overflow-y: auto;
+  height: calc(100vh - 455px);
+  &::-webkit-scrollbar {
+   width: 4px;
+ }
+ &::-webkit-scrollbar-track {
+   background: ${props => props.scrollbar} ;
+   border-radius: 10px;
+ }
+ &::-webkit-scrollbar-thumb {
+   background: ${props => props.scrollbarInnerMain};
+   border-radius: 10px;
+ }
 `;
 export const PlaylistTitleCol = styled.div`
   font-style: normal;
@@ -134,11 +146,12 @@ export const col04 = styled(PlaylistTitleCol)`
   text-align: end;
 `;
 export const PlaylistItem = styled.div`
-  overflow: hidden;
+
   position: relative;
   width: 100%;
   display: block;
   margin-bottom: 12px;
+  padding-right:5px;
 `;
 export const PlaylistTrack = styled.div`
   display: flex;
@@ -227,41 +240,7 @@ export const TrackTimeText = styled.span`
   text-align: right;
   color: #696969;
 `;
-export const Dropdown = styled.div`
-  position: relative;
-`;
-export const DropdownWrapper = styled.div`
-  top: 48px;
-  position: absolute;
-  width: 248px;
-  height: 305px;
-  background: #313131;
-  border-radius: 12px;
-  padding: 34px;
-  z-index: 1000;
-`;
-export const DropdownMenu = styled.div`
-  height: 100%;
-  overflow-y: auto;
-  &::-webkit-scrollbar {
-    width: 4px;
-  }
-  &::-webkit-scrollbar-track {
-    background: ${props => props.scrollbar} ;
-  }
-  &::-webkit-scrollbar-thumb {
-    background: ${props => props.scrollbarInner};
-    border-radius: 10px;
-  }
-`;
-export const DropdownList = styled.div`
-  margin-bottom: 26px;
-  cursor: pointer;
-  &.active {
-    text-decoration-line: underline;
-    color: #b672ff;
-  }
-`;
+
 export const _btnText = styled.div`
   &:hover {
     border-color: #d9b6ff;
@@ -280,16 +259,7 @@ export const _btnText = styled.div`
   }
 `;
 
-export const FilterButton = styled(_btnText)`
-  font-style: normal;
-  font-weight: 400;
-  font-size: 16px;
-  line-height: 24px;
-  border: 1px solid;
-  border-radius: 60px;
-  padding: 6px 20px;
-  margin-right: 10px;
-`;
+
 export const NameIdLoad = styled.div`
   position: absolute;
   transform: translate(0, -50%);

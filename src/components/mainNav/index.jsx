@@ -6,7 +6,6 @@ import logo from "../../img/logo.png"
 import logoDark from "../../img/logo-dark.png"
 import {useThemeContext} from "../../context/theme"
 function MenuItem(props) {
-   console.log(props);
    return (
       <S.MenuItem><Link  style={{color: props.theme.color}} to={props.href}>{props.link}</Link></S.MenuItem>
    )}
