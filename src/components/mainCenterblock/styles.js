@@ -104,6 +104,18 @@ export const ContentPlaylist = styled.div`
   display: flex;
   flex-direction: column;
   overflow-y: auto;
+  height: calc(100vh - 455px);
+  &::-webkit-scrollbar {
+   width: 4px;
+ }
+ &::-webkit-scrollbar-track {
+   background: ${props => props.scrollbar} ;
+   border-radius: 10px;
+ }
+ &::-webkit-scrollbar-thumb {
+   background: ${props => props.scrollbarInnerMain};
+   border-radius: 10px;
+ }
 `;
 export const PlaylistTitleCol = styled.div`
   font-style: normal;
@@ -134,11 +146,12 @@ export const col04 = styled(PlaylistTitleCol)`
   text-align: end;
 `;
 export const PlaylistItem = styled.div`
-  overflow: hidden;
+
   position: relative;
   width: 100%;
   display: block;
   margin-bottom: 12px;
+  padding-right:5px;
 `;
 export const PlaylistTrack = styled.div`
   display: flex;

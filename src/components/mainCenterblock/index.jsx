@@ -135,7 +135,7 @@ const [visibleFilter, setVisibleFilter] = useState(null);
                             </S.col04>
                
                         </S.ContentTitle>
-                        <S.ContentPlaylist >
+                        <S.ContentPlaylist scrollbar={theme.scrollbar} scrollbarInnerMain={theme.scrollbarInnerMain}>
                            {loading ? forLoad.map((el)=>(<PlaylistItem loading={loading}/>)) :filtersTrack?.map((el, index) => (
                                  <PlaylistItem  playTrack={playTrack} trackUrl={el} stared_user={el.stared_user} id={el.id} name={el.name} author={el.author} album={el.album} duration_in_seconds={el.duration_in_seconds} user_id={auth_data.user_id} token={auth_data.access} />
                               ))

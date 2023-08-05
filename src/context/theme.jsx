@@ -12,6 +12,7 @@ export const themes = {
      bgDropdown: '#f1f1f1',
      scrollbar: '#4b4949',
      scrollbarInner: '#ffffff',
+     scrollbarInnerMain: '#ebc1c1',
    },
    dark: {
      color: '#fff',
@@ -25,6 +26,7 @@ export const themes = {
      bgDropdown: '#313131',
      scrollbar: '#ffffff',
      scrollbarInner: '#4b4949',
+     scrollbarInnerMain: '#4b4949',
    },
  };
  
